@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.data.DataModel
 import com.cocos.develop.dictionarykiss.domain.AppState
 import com.cocos.develop.dictionarykiss.presentation.ui.base.BaseActivity
-import com.cocos.develop.dictionarykiss.presentation.ui.base.Presenter
-import com.cocos.develop.dictionarykiss.presentation.ui.base.View
-import com.cocos.develop.dictionarykiss.presentation.ui.main.MainAdapter
-import com.cocos.develop.dictionarykiss.presentation.ui.main.MainPresenterImpl
-import com.cocos.develop.dictionarykiss.presentation.ui.main.SearchDialogFragment
+import androidx.lifecycle.Observer
+import com.cocos.develop.dictionarykiss.presentation.ui.main.*
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity<AppState>() {
+class MainActivity : BaseActivity<AppState, MainInteractor>()  {
 
+    override val model: MainViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    }
+    private val observer = Observer<AppState> { renderData(it) }
     private var adapter: MainAdapter? = null
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
@@ -26,10 +28,6 @@ class MainActivity : BaseActivity<AppState>() {
             }
         }
 
-    override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,7 +35,7 @@ class MainActivity : BaseActivity<AppState>() {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
+                    model.getData(searchWord, true).observe(this@MainActivity, observer)
                 }
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
@@ -47,16 +45,16 @@ class MainActivity : BaseActivity<AppState>() {
     override fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                val dataModel = appState.data
-                if (dataModel == null || dataModel.isEmpty()) {
+                val data = appState.data
+                if (data == null || data.isEmpty()) {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
                     showViewSuccess()
                     if (adapter == null) {
                         main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-                        main_activity_recyclerview.adapter = MainAdapter(onListItemClickListener, dataModel)
+                        main_activity_recyclerview.adapter = MainAdapter(onListItemClickListener, data)
                     } else {
-                        adapter!!.setData(dataModel)
+                        adapter!!.setData(data)
                     }
                 }
             }
@@ -81,7 +79,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
-            presenter.getData("hi", true)
+            model.getData("hi", true).observe(this, observer)
         }
     }
 

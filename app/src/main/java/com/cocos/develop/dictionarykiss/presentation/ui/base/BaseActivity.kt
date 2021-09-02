@@ -10,26 +10,9 @@ import com.cocos.develop.dictionarykiss.domain.AppState
  * @author Amina
  * 25.08.2021
  */
-abstract class BaseActivity<T : AppState> : AppCompatActivity(), View {
+abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity() {
 
-    protected lateinit var presenter: Presenter<T, View>
+    abstract val model: BaseViewModel<T>
 
-    protected abstract fun createPresenter(): Presenter<T, View>
-
-    abstract override fun renderData(appState: AppState)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter = createPresenter()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter.attachView(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.detachView(this)
-    }
+    abstract fun renderData(dataModel: T)
 }
