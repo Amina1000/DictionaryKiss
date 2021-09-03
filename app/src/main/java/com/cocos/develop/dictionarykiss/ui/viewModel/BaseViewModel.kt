@@ -1,4 +1,4 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.base
+package com.cocos.develop.dictionarykiss.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.cocos.develop.dictionarykiss.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.base
+ * homework com.cocos.develop.dictionarykiss.ui.base
  *
  * @author Amina
  * 02.09.2021

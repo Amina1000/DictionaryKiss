@@ -1,26 +1,22 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.main
+package com.cocos.develop.dictionarykiss.ui.main
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import com.cocos.develop.dictionarykiss.data.datasource.DataSourceLocal
 import com.cocos.develop.dictionarykiss.data.datasource.DataSourceRemote
 import com.cocos.develop.dictionarykiss.data.repository.RepositoryImplementation
 import com.cocos.develop.dictionarykiss.domain.AppState
-import com.cocos.develop.dictionarykiss.presentation.ui.base.BaseViewModel
+import com.cocos.develop.dictionarykiss.ui.viewModel.BaseViewModel
 import io.reactivex.observers.DisposableObserver
+import javax.inject.Inject
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.main
+ * homework com.cocos.develop.dictionarykiss.ui.main
  *
  * @author Amina
  * 02.09.2021
  */
-class MainViewModel(
-    private val interactor: MainInteractor = MainInteractor(
-        RepositoryImplementation(DataSourceRemote()),
-        RepositoryImplementation(DataSourceLocal())
-    )
-) : BaseViewModel<AppState>() {
+class MainViewModel @Inject constructor(private val interactor: MainInteractor) :
+    BaseViewModel<AppState>() {
 
     private var appState: AppState? = null
 

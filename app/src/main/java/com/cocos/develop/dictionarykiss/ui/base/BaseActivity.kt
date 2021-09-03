@@ -1,11 +1,12 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.base
+package com.cocos.develop.dictionarykiss.ui.base
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cocos.develop.dictionarykiss.domain.AppState
+import com.cocos.develop.dictionarykiss.ui.viewModel.BaseViewModel
+import com.cocos.develop.dictionarykiss.ui.viewModel.Interactor
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.base
+ * homework com.cocos.develop.dictionarykiss.ui.base
  *
  * @author Amina
  * 25.08.2021

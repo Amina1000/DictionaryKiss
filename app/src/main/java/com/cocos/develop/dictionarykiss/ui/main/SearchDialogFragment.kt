@@ -1,4 +1,4 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.main
+package com.cocos.develop.dictionarykiss.ui.main
 
 import android.os.Bundle
 import android.text.Editable
@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.search_dialog_fragment.*
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.main
+ * homework com.cocos.develop.dictionarykiss.ui.main
  *
  * @author Amina
  * 26.08.2021

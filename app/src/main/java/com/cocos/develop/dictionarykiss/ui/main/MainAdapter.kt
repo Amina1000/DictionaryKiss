@@ -1,4 +1,4 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.main
+package com.cocos.develop.dictionarykiss.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.main.adapter
+ * homework com.cocos.develop.dictionarykiss.ui.main.adapter
  *
  * @author Amina
  * 26.08.2021

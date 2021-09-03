@@ -1,4 +1,4 @@
-package com.cocos.develop.dictionarykiss.presentation
+package com.cocos.develop.dictionarykiss.ui.main
 
 import android.os.Bundle
 import android.view.View.GONE
@@ -9,15 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.data.DataModel
 import com.cocos.develop.dictionarykiss.domain.AppState
-import com.cocos.develop.dictionarykiss.presentation.ui.base.BaseActivity
+import com.cocos.develop.dictionarykiss.ui.base.BaseActivity
 import androidx.lifecycle.Observer
-import com.cocos.develop.dictionarykiss.presentation.ui.main.*
+import com.cocos.develop.dictionarykiss.ui.main.*
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<AppState, MainInteractor>()  {
 
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
     override val model: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
     private val observer = Observer<AppState> { renderData(it) }
     private var adapter: MainAdapter? = null
@@ -31,6 +36,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        AndroidInjection.inject(this)
         search_fab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
