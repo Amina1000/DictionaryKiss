@@ -1,5 +1,4 @@
 package com.cocos.develop.dictionarykiss.domain
-import io.reactivex.Observable
 
 /**
  * homework com.cocos.develop.dictionarykiss.domain
