@@ -8,5 +8,5 @@ import io.reactivex.Observable
  * 26.08.2021
  */
 interface Repository<T> {
-    fun getData(word: String): Observable<T>
+    suspend fun getData(word: String): T
 }
