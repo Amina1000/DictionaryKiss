@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
+import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.dictionarykiss.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -34,7 +35,12 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
                 startActivity(
-                    Intent(this@MainActivity, DescriptionActivity::class.java)
+                    DescriptionActivity.getIntent(
+                        this@MainActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        data.meanings[0].imageUrl
+                    )
                 )
             }
         }

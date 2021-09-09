@@ -9,7 +9,6 @@ import com.cocos.develop.dictionarykiss.data.DataModel
 import com.cocos.develop.dictionarykiss.utils.loadImageFromResource
 import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
-
 /**
  * homework com.cocos.develop.dictionarykiss.ui.main.adapter
  *
