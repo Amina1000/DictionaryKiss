@@ -1,16 +1,20 @@
 package com.cocos.develop.dictionarykiss.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.data.DataModel
 import com.cocos.develop.dictionarykiss.domain.AppState
 import com.cocos.develop.dictionarykiss.ui.base.BaseActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.dictionarykiss.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,7 +33,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+                startActivity(
+                    Intent(this@MainActivity, DescriptionActivity::class.java)
+                )
             }
         }
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
@@ -64,6 +70,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         search_fab.setOnClickListener(fabClickListener)
         main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
         main_activity_recyclerview.adapter = adapter
+
+        val itemDecoration =DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
+        itemDecoration.setDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical, null)!!
+        )
+        main_activity_recyclerview.addItemDecoration(itemDecoration)
+
+
     }
 
     override fun renderData(appState: AppState) {
