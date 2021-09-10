@@ -1,6 +1,7 @@
 package com.cocos.develop.dictionarykiss.data.repository
 
 import com.cocos.develop.dictionarykiss.data.DataModel
+import com.cocos.develop.dictionarykiss.domain.AppState
 import com.cocos.develop.dictionarykiss.domain.DataSource
 import com.cocos.develop.dictionarykiss.domain.Repository
 import io.reactivex.Observable
@@ -17,4 +18,5 @@ class RepositoryImplementation(private val dataSource: DataSource<List<DataModel
     override suspend fun getData(word: String): List<DataModel> {
         return dataSource.getData(word)
     }
+
 }
