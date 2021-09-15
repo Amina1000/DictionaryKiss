@@ -10,3 +10,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Dictionary Kiss"
 include ':app'
+include ':core'
+include ':model'
+include ':utils'
+include ':repository'
+include ':favoriteScreen'

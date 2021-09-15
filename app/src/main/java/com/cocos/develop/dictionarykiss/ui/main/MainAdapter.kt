@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cocos.develop.dictionarykiss.R
-import com.cocos.develop.dictionarykiss.data.DataModel
 import com.cocos.develop.dictionarykiss.utils.loadImageFromResource
+import com.cocos.develop.model.data.DataModel
 import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
 /**

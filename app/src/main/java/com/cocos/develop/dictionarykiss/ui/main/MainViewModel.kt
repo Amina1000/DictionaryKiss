@@ -1,13 +1,12 @@
 package com.cocos.develop.dictionarykiss.ui.main
 
 import androidx.lifecycle.LiveData
-import com.cocos.develop.dictionarykiss.domain.AppState
-import com.cocos.develop.dictionarykiss.ui.viewModel.BaseViewModel
+import com.cocos.develop.core.viewModel.BaseViewModel
 import com.cocos.develop.dictionarykiss.utils.parseSearchResults
+import com.cocos.develop.model.data.AppState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 /**
  * homework com.cocos.develop.dictionarykiss.ui.main
@@ -38,7 +37,14 @@ class MainViewModel constructor(private val interactor: MainInteractor) :
     // и так делает это благодаря CoroutineCallAdapterFactory(). Это же
     // касается и Room
     private suspend fun startInteractor(word: String, isOnline: Boolean) = withContext(Dispatchers.IO) {
-        _mutableLiveData.postValue(parseSearchResults(interactor.getData(word, isOnline)))
+        _mutableLiveData.postValue(
+            parseSearchResults(
+                interactor.getData(
+                    word,
+                    isOnline
+                )
+            )
+        )
     }
 
     override fun handleError(error: Throwable) {

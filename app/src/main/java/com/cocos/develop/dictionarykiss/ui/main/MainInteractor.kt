@@ -1,10 +1,10 @@
 package com.cocos.develop.dictionarykiss.ui.main
 
-import com.cocos.develop.dictionarykiss.data.DataModel
-import com.cocos.develop.dictionarykiss.domain.AppState
-import com.cocos.develop.dictionarykiss.domain.Repository
-import com.cocos.develop.dictionarykiss.domain.RepositoryLocal
-import com.cocos.develop.dictionarykiss.ui.viewModel.Interactor
+import com.cocos.develop.model.data.DataModel
+import com.cocos.develop.model.data.AppState
+import com.cocos.develop.repository.domain.Repository
+import com.cocos.develop.repository.domain.RepositoryLocal
+import com.cocos.develop.core.viewModel.Interactor
 
 /**
  * homework com.cocos.develop.dictionarykiss.ui.main
@@ -15,7 +15,7 @@ import com.cocos.develop.dictionarykiss.ui.viewModel.Interactor
 class MainInteractor (
     private val repositoryRemote: Repository<List<DataModel>>,
     private val repositoryLocal: RepositoryLocal<List<DataModel>>
-) : Interactor<AppState>  {
+) : Interactor<AppState> {
 
     override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
         val appState: AppState
