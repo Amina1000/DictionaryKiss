@@ -46,7 +46,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl
+                        data.meanings!![0].imageUrl,
+                        data.meanings!![0].transcription,
+                        data.meanings!![0].soundUrl
                     )
                 )
             }

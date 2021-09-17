@@ -26,7 +26,9 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
                         this@FavoriteActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl
+                        data.meanings!![0].imageUrl,
+                        data.meanings!![0].transcription,
+                        data.meanings!![0].soundUrl
                     )
                 )
             }

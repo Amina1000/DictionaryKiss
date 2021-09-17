@@ -26,7 +26,8 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings!!) {
             if (meaning.translation != null && !meaning.translation!!.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(meaning.id, meaning.translation, meaning.imageUrl))
+                newMeanings.add(Meanings(meaning.id, meaning.translation, meaning.imageUrl,
+                    meaning.previewUrl, meaning.transcription, meaning.soundUrl))
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -36,14 +37,15 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
 }
 
 fun convertMeaningsToString(meanings: List<Meanings>): String {
-    var meaningsSeparatedByComma = String()
-    for ((index, meaning) in meanings.withIndex()) {
-        meaningsSeparatedByComma += if (index + 1 != meanings.size) {
-            String.format("%s%s", meaning.translation?.translation, ", ")
-        } else {
-            meaning.translation?.translation
+    var meaningsSeparatedByComma = StringBuilder()
+    meanings.forEach { meaning ->
+        meaning.translation?.let {
+            meaningsSeparatedByComma.append(it.translation)
+            it.note?.let { note ->
+                meaningsSeparatedByComma.append(note)
+            }
         }
     }
-    return meaningsSeparatedByComma
+    return meaningsSeparatedByComma.toString()
 }
 

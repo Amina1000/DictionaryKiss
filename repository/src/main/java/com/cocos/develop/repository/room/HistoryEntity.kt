@@ -14,7 +14,15 @@ class HistoryEntity(
     @field:ColumnInfo(name = "word")
     var word: String,
     @field:ColumnInfo(name = "description")
-    var description: String?,
+    var translation: String?,
     @field:ColumnInfo(name = "imageUrl")
-    var imageUrl: String?
+    var imageUrl: String?,
+    @field:ColumnInfo(name = "note")
+    var note: String?,
+    @field:ColumnInfo(name = "previewUrl")
+    var previewUrl: String?,
+    @field:ColumnInfo(name = "transcription")
+    var transcription: String?,
+    @field:ColumnInfo(name = "soundUrl")
+    var soundUrl: String?
 )
