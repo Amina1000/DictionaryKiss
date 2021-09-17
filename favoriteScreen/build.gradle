@@ -1,10 +1,27 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.dynamic-feature'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+android {
+    compileSdkVersion Config.compile_sdk
+
+    defaultConfig {
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
 }
 
 dependencies {
+    implementation project(Modules.app)
     implementation project(Modules.model)
     implementation project(Modules.repository)
     implementation project(Modules.core)
@@ -13,9 +30,16 @@ dependencies {
     //Design
     implementation Design.appcompat
     implementation Design.material
+    implementation Design.constraint_layout
+    implementation Design.swipere_fresh
 
     //Picasso
     implementation Picasso.picasso
+
+    // Room
+    implementation Room.runtime
+    kapt Room.compiler
+    implementation Room.room_ktx
     
     //Kotlin
     implementation Kotlin.core
@@ -32,4 +56,11 @@ dependencies {
     androidTestImplementation TestImpl.testExt
     androidTestImplementation TestImpl.espresso
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Tools
+    implementation Tools.multidex
+}
+
+repositories {
+    mavenCentral()
 }
