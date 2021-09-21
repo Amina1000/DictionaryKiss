@@ -17,7 +17,6 @@ import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
-import com.cocos.develop.utils.network.isOnline
 import com.cocos.develop.utils.ui.viewById
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -64,7 +63,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) {
-                isNetworkAvailable = isOnline(applicationContext)
                 if (isNetworkAvailable) {
                     model.getData(searchWord, isNetworkAvailable)
                 } else {
