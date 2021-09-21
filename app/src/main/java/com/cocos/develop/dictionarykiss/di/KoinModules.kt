@@ -1,14 +1,20 @@
 package com.cocos.develop.dictionarykiss.di
 
 import androidx.room.Room
+import com.cocos.develop.dictionarykiss.ui.main.MainActivity
 import com.cocos.develop.dictionarykiss.ui.main.MainInteractor
 import com.cocos.develop.dictionarykiss.ui.main.MainViewModel
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.repository.datasource.RetrofitImplementation
 import com.cocos.develop.repository.datasource.RoomDataBaseImplementation
 import com.cocos.develop.repository.RepositoryImplementation
 import com.cocos.develop.repository.RepositoryImplementationLocal
+import com.cocos.develop.repository.domain.Repository
+import com.cocos.develop.repository.domain.RepositoryLocal
 import com.cocos.develop.repository.room.HistoryDataBase
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
@@ -27,12 +33,12 @@ val application = module {
 
     single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
     single { get<HistoryDataBase>().historyDao() }
-    single<com.cocos.develop.repository.domain.Repository<List<com.cocos.develop.model.data.DataModel>>> {
+    single<Repository<List<DataModel>>> {
         RepositoryImplementation(
             RetrofitImplementation()
         )
     }
-    single<com.cocos.develop.repository.domain.RepositoryLocal<List<com.cocos.develop.model.data.DataModel>>> {
+    single<RepositoryLocal<List<DataModel>>> {
         RepositoryImplementationLocal(
             RoomDataBaseImplementation(
                 get()
@@ -42,7 +48,10 @@ val application = module {
 }
 
 val mainScreen = module {
-    factory { MainInteractor(get(), get()) }
-    factory { MainViewModel(get()) }
+    scope(named<MainActivity>()) {
+        scoped { MainInteractor(get(), get()) }
+        viewModel { MainViewModel(get()) }
+    }
+//    factory { MainInteractor(get(), get()) }
+//    factory { MainViewModel(get()) }
 }
-

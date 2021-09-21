@@ -21,6 +21,7 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val HISTORY_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
@@ -75,7 +76,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private fun iniViewModel() {
         check(main_activity_recyclerview.adapter == null) {getString(R.string.error_initialised)}
         injectDependencies()
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
         model.getData("", false)
         model.subscribe().observe(this@MainActivity, { renderData(it) })
