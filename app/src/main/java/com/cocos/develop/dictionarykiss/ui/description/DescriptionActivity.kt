@@ -5,21 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.cocos.develop.dictionarykiss.R
+import com.cocos.develop.dictionarykiss.databinding.ActivityDescriptionBinding
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
 import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
-import kotlinx.android.synthetic.main.activity_description.*
 
 class DescriptionActivity : AppCompatActivity() {
+
+    private val binding: ActivityDescriptionBinding by viewBinding(ActivityDescriptionBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_description)
 
         setActionbarHomeButtonAsUp()
-        description_screen_swipe_refresh_layout.setOnRefreshListener { startLoadingOrShowError() }
+        binding.descriptionScreenSwipeRefreshLayout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
     }
 
@@ -41,20 +44,20 @@ class DescriptionActivity : AppCompatActivity() {
     private fun setData() {
 
         val bundle = intent.extras
-        description_header.text = bundle?.getString(WORD_EXTRA)
-        description_textview.text = bundle?.getString(DESCRIPTION_EXTRA)
-        transcription.text = bundle?.getString(TRANSCRIPTION)
-        soundUrl.text = bundle?.getString(SOUND_URL)
+        binding.descriptionHeader.text = bundle?.getString(WORD_EXTRA)
+        binding.descriptionTextView.text = bundle?.getString(DESCRIPTION_EXTRA)
+        binding.transcriptionWord.text = bundle?.getString(TRANSCRIPTION)
+        binding.soundUrl.text = bundle?.getString(SOUND_URL)
 
         val imageLink = bundle?.getString(URL_EXTRA)
         if (imageLink.isNullOrBlank()) {
             stopRefreshAnimationIfNeeded(
-                description_screen_swipe_refresh_layout
+                binding.descriptionScreenSwipeRefreshLayout
             )
         } else {
-            description_imageview.usePicassoToLoadPhoto(
+            binding.descriptionImageview.usePicassoToLoadPhoto(
                 imageLink,
-                description_screen_swipe_refresh_layout
+                binding.descriptionScreenSwipeRefreshLayout
             )
             //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
         }
@@ -74,7 +77,7 @@ class DescriptionActivity : AppCompatActivity() {
                         supportFragmentManager,
                         DIALOG_FRAGMENT_TAG
                     )
-                    stopRefreshAnimationIfNeeded(description_screen_swipe_refresh_layout)
+                    stopRefreshAnimationIfNeeded(binding.descriptionScreenSwipeRefreshLayout)
                 }
             })
     }
@@ -87,7 +90,6 @@ class DescriptionActivity : AppCompatActivity() {
         private const val URL_EXTRA = "6e4b154d-e01f-4953-a404-639fb3bf7281"
         private const val TRANSCRIPTION = "5e4b154d-e01f-4953-a404-639fb3bf7281"
         private const val SOUND_URL = "8e4b154d-e01f-4953-a404-639fb3bf7281"
-
 
         fun getIntent(
             context: Context,
