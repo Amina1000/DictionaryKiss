@@ -24,6 +24,7 @@ import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -56,7 +57,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: com.cocos.develop.model.data.DataModel) {
+            override fun onItemClick(data: DataModel) {
+                model.setData(data)
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,

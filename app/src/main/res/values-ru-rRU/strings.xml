@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_stub">Ошибка</string>
+    <string name="button_search">Поиск</string>
+    <string name="search_hint">Слово</string>
+    <string name="empty_server_response_on_success">Сервер не отвечает</string>
+    <string name="dialog_title_device_is_offline">Нет связи с сервером</string>
+    <string name="dialog_button_cancel">Отмена</string>
+    <string name="dialog_title_sorry">Извините</string>
+    <string name="my_favorite">Избранное</string>
+    <string name="transcription_text">Транскрипция</string>
+</resources>

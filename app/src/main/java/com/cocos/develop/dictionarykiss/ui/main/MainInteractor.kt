@@ -21,10 +21,13 @@ class MainInteractor (
         val appState: AppState
         if (fromRemoteSource) {
             appState = AppState.Success(repositoryRemote.getData(word))
-            repositoryLocal.saveToDB(appState)
         } else {
             appState = AppState.Success(repositoryLocal.getData(word))
         }
         return appState
+    }
+
+    suspend fun setData(dataModel: DataModel) {
+        repositoryLocal.saveToDB(dataModel)
     }
 }

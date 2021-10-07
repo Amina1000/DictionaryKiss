@@ -11,6 +11,9 @@ interface HistoryDao {
     @Query("SELECT * FROM HistoryEntity WHERE word LIKE :word")
     suspend fun getDataByWord(word: String): HistoryEntity
 
+    @Query("SELECT * FROM HistoryEntity WHERE favorite = 1")
+    suspend fun getFavorite():  List<HistoryEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: HistoryEntity)
 

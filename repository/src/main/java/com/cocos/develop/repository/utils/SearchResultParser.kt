@@ -3,51 +3,39 @@ package com.cocos.develop.repository.utils
 import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.model.data.Meanings
 import com.cocos.develop.model.data.Translation
-import com.cocos.develop.model.data.AppState
 import com.cocos.develop.repository.room.HistoryEntity
 
 
-fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
-    return when (appState) {
-        is AppState.Success -> {
-            val searchResult = appState.data
-            if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
-                null
-            } else {
-                val historyEntity =
-                    HistoryEntity(
-                        searchResult[0].id!!, searchResult[0].text!!, "", "", "", "", "", ""
-                    )
-                if (searchResult[0].meanings.isNullOrEmpty()) {
-                    historyEntity
-                } else {
-                    searchResult[0].meanings?.let {
-                        historyEntity.translation = convertMeaningsToString(it)
-                        it[0].let { firstEn ->
-                            firstEn.imageUrl?.let { image ->
-                                historyEntity.imageUrl = image
-                            }
-                            firstEn.previewUrl?.let { prev ->
-                                historyEntity.previewUrl = prev
-                            }
-                            firstEn.transcription?.let { script ->
-                                historyEntity.transcription = script
-                            }
-                            firstEn.translation?.let { transEntity ->
-                                historyEntity.note = transEntity.note
-                            }
-                            firstEn.soundUrl?.let { sound ->
-                                historyEntity.soundUrl = sound
-                            }
-                        }
-                        historyEntity
-                    }
-                }
+fun convertDataModelSuccessToEntity(dataModel: DataModel): HistoryEntity? {
+
+    val historyEntity =
+        HistoryEntity(
+            dataModel.id!!, dataModel.text!!, "", "", "", "",
+            "", "", dataModel.favorite
+        )
+    dataModel.meanings?.let {
+        historyEntity.translation = convertMeaningsToString(it)
+        it[0].let { firstEn ->
+            firstEn.imageUrl?.let { image ->
+                historyEntity.imageUrl = image
+            }
+            firstEn.previewUrl?.let { prev ->
+                historyEntity.previewUrl = prev
+            }
+            firstEn.transcription?.let { script ->
+                historyEntity.transcription = script
+            }
+            firstEn.translation?.let { transEntity ->
+                historyEntity.note = transEntity.note
+            }
+            firstEn.soundUrl?.let { sound ->
+                historyEntity.soundUrl = sound
             }
         }
-        else -> null
     }
+    return historyEntity
 }
+
 
 fun convertMeaningsToString(meanings: List<Meanings>): String {
     val meaningsSeparatedByComma = StringBuilder()

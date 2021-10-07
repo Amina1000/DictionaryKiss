@@ -1,5 +1,7 @@
 package com.cocos.develop.core.viewModel
 
+import com.cocos.develop.model.data.DataModel
+
 
 /**
  * homework com.cocos.develop.dictionarykiss.domain.presenter
