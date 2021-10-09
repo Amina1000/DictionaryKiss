@@ -1,6 +1,9 @@
 package com.cocos.develop.dictionarykiss.ui.description
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.cocos.develop.dictionarykiss.utils.parseSearchResults
+import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
 import kotlinx.coroutines.*
 
@@ -10,13 +13,14 @@ import kotlinx.coroutines.*
  * @author Amina
  * 09.10.2021
  */
-class DescriptionViewModel(private val interactor: DescriptionInteractor): ViewModel()  {
+class DescriptionViewModel(private val interactor: DescriptionInteractor):
+    ViewModel() {
 
-    protected val viewModelCoroutineScope = CoroutineScope(
+    private val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.Main
                 + SupervisorJob()
                 + CoroutineExceptionHandler { _, throwable ->
-            //обработать ошибку
+           //
         })
     fun setData(data: DataModel) {
         viewModelCoroutineScope.launch {

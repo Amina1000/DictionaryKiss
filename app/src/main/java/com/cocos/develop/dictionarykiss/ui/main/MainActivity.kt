@@ -22,7 +22,6 @@ import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
-import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
@@ -62,11 +61,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
-                        data.text!!,
-                        convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl,
-                        data.meanings!![0].transcription,
-                        data.meanings!![0].soundUrl
+                        data
                     )
                 )
             }
@@ -201,7 +196,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
 
-    override fun setDataToAdapter(data: List<com.cocos.develop.model.data.DataModel>) {
+    override fun setDataToAdapter(data: List<DataModel>) {
         adapter.setData(data)
     }
 }

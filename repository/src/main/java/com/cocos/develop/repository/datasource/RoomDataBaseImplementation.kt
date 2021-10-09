@@ -21,7 +21,7 @@ class RoomDataBaseImplementation(private val historyDao: HistoryDao) :
     }
 
     override suspend fun saveToDB(dataModel: DataModel) {
-        convertDataModelSuccessToEntity(dataModel)?.let {
+        convertDataModelSuccessToEntity(dataModel).also {
             historyDao.insert(it)
         }
     }

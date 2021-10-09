@@ -9,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.databinding.ActivityDescriptionBinding
 import com.cocos.develop.dictionarykiss.di.injectDependencies
+import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
 import com.cocos.develop.model.data.DataModel
@@ -35,26 +36,20 @@ class DescriptionActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        data?.let{dataModel->
+        data?.let { dataModel ->
+            setFavoriteImageFab(dataModel.favorite)
             favorite_fab.setOnClickListener {
-                if (dataModel.favorite){
-                    dataModel.favorite = false
-                    setFavoriteImageFab(dataModel.favorite)
-                    model.setData(dataModel)
-                }else{
-                    dataModel.favorite = true
-                    setFavoriteImageFab(dataModel.favorite)
-                    model.setData(dataModel)
-                }
+                dataModel.favorite = !dataModel.favorite
+                setFavoriteImageFab(dataModel.favorite)
+                model.setData(dataModel)
             }
         }
-
     }
 
-    private fun setFavoriteImageFab(favorite:Boolean){
-        if (favorite){
+    private fun setFavoriteImageFab(favorite: Boolean) {
+        if (favorite) {
             favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_24)
-        }else{
+        } else {
             favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
         }
     }
@@ -63,7 +58,6 @@ class DescriptionActivity : AppCompatActivity() {
         injectDependencies()
         val viewModel: DescriptionViewModel by currentScope.inject()
         model = viewModel
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,22 +78,27 @@ class DescriptionActivity : AppCompatActivity() {
     private fun setData() {
 
         val bundle = intent.extras
-        binding.descriptionHeader.text =  bundle?.getString(WORD_EXTRA)
-        binding.descriptionTextView.text = bundle?.getString(DESCRIPTION_EXTRA)
-        binding.transcriptionWord.text = bundle?.getString(TRANSCRIPTION)
-        binding.soundUrl.text = bundle?.getString(SOUND_URL)
+        data = bundle?.getParcelable(DATA_MODEL)
+        data?.let {
+            binding.descriptionHeader.text = it.text
+            it.meanings?.also { listMeanings ->
+                binding.descriptionTextView.text = convertMeaningsToString(listMeanings)
+                binding.transcriptionWord.text = listMeanings.first().transcription
+                binding.soundUrl.text = String.format("https:%s",listMeanings.first().soundUrl)
 
-        val imageLink = bundle?.getString(URL_EXTRA)
-        if (imageLink.isNullOrBlank()) {
-            stopRefreshAnimationIfNeeded(
-                binding.descriptionScreenSwipeRefreshLayout
-            )
-        } else {
-            binding.descriptionImageview.usePicassoToLoadPhoto(
-                imageLink,
-                binding.descriptionScreenSwipeRefreshLayout
-            )
-            //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
+                val imageLink = listMeanings.first().imageUrl
+                if (imageLink.isNullOrBlank()) {
+                    stopRefreshAnimationIfNeeded(
+                        binding.descriptionScreenSwipeRefreshLayout
+                    )
+                } else {
+                    binding.descriptionImageview.usePicassoToLoadPhoto(
+                        imageLink,
+                        binding.descriptionScreenSwipeRefreshLayout
+                    )
+                    //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
+                }
+            }
         }
     }
 
@@ -125,26 +124,15 @@ class DescriptionActivity : AppCompatActivity() {
     companion object {
 
         private const val DIALOG_FRAGMENT_TAG = "8c7dff51-9769-4f6d-bbee-a3896085e76e"
-        private const val WORD_EXTRA = "f76a288a-5dcc-43f1-ba89-7fe1d53f63b0"
-        private const val DESCRIPTION_EXTRA = "0eeb92aa-520b-4fd1-bb4b-027fbf963d9a"
-        private const val URL_EXTRA = "6e4b154d-e01f-4953-a404-639fb3bf7281"
-        private const val TRANSCRIPTION = "5e4b154d-e01f-4953-a404-639fb3bf7281"
-        private const val SOUND_URL = "8e4b154d-e01f-4953-a404-639fb3bf7281"
+        private const val DATA_MODEL = "e76a288a-5dcc-43f1-ba89-7fe1d53f63b8"
 
         fun getIntent(
             context: Context,
-            word: String,
-            description: String,
-            url: String?,
-            transcription: String?,
-            soundUrl: String?
+            dataModel: DataModel?
 
         ): Intent = Intent(context, DescriptionActivity::class.java).apply {
-            putExtra(WORD_EXTRA, word)
-            putExtra(DESCRIPTION_EXTRA, description)
-            putExtra(URL_EXTRA, url)
-            putExtra(TRANSCRIPTION, transcription)
-            putExtra(SOUND_URL, soundUrl)
+            putExtra(DATA_MODEL, dataModel)
         }
     }
+
 }

@@ -6,7 +6,7 @@ import com.cocos.develop.model.data.Translation
 import com.cocos.develop.repository.room.HistoryEntity
 
 
-fun convertDataModelSuccessToEntity(dataModel: DataModel): HistoryEntity? {
+fun convertDataModelSuccessToEntity(dataModel: DataModel): HistoryEntity {
 
     val historyEntity =
         HistoryEntity(
@@ -68,7 +68,7 @@ fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
                             entity.transcription,
                             entity.soundUrl
                         )
-                    )
+                    ),entity.favorite
                 )
             )
         }

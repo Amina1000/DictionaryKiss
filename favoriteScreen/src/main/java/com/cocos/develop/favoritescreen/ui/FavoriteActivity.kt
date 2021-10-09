@@ -8,14 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cocos.develop.core.base.BaseActivity
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.favoritescreen.R
-import com.cocos.develop.favoritescreen.utils.convertMeaningsToString
 import com.cocos.develop.favoritescreen.utils.injectDependencies
-import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.model.data.AppState
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
 import kotlinx.android.synthetic.main.activity_favorite.*
 import org.koin.android.scope.currentScope
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
     override lateinit var model: FavoriteViewModel
@@ -28,11 +26,7 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@FavoriteActivity,
-                        data.text!!,
-                        convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl,
-                        data.meanings!![0].transcription,
-                        data.meanings!![0].soundUrl
+                        data
                     )
                 )
             }

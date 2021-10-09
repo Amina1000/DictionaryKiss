@@ -35,7 +35,7 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
             }
         }
         if (newMeanings.isNotEmpty()) {
-            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings))
+            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings, dataModel.favorite))
         }
     }
 }

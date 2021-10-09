@@ -14,7 +14,7 @@ interface HistoryDao {
     @Query("SELECT * FROM HistoryEntity WHERE favorite = 1")
     suspend fun getFavorite():  List<HistoryEntity>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: HistoryEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
