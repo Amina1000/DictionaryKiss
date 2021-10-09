@@ -1,6 +1,9 @@
 package com.cocos.develop.dictionarykiss.di
 
 import androidx.room.Room
+import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
+import com.cocos.develop.dictionarykiss.ui.description.DescriptionInteractor
+import com.cocos.develop.dictionarykiss.ui.description.DescriptionViewModel
 import com.cocos.develop.dictionarykiss.ui.main.MainActivity
 import com.cocos.develop.dictionarykiss.ui.main.MainInteractor
 import com.cocos.develop.dictionarykiss.ui.main.MainViewModel
@@ -26,7 +29,7 @@ import org.koin.dsl.module
 fun injectDependencies() = loadModules
 
 private val loadModules by lazy {
-    loadKoinModules(listOf(application, mainScreen))
+    loadKoinModules(listOf(application, mainScreen, descriptionScreen))
 }
 
 val application = module {
@@ -54,4 +57,11 @@ val mainScreen = module {
     }
 //    factory { MainInteractor(get(), get()) }
 //    factory { MainViewModel(get()) }
+}
+
+val descriptionScreen = module {
+    scope(named<DescriptionActivity>()) {
+        scoped { DescriptionInteractor(get()) }
+        viewModel { DescriptionViewModel(get()) }
+    }
 }

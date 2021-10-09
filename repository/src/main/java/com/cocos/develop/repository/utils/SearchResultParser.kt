@@ -41,9 +41,11 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
     val meaningsSeparatedByComma = StringBuilder()
     meanings.forEach { meaning ->
         meaning.translation?.let {
-            meaningsSeparatedByComma.append(it.translation).append("\n")
+            meaningsSeparatedByComma.append("-").append(it.translation).append("\n")
             it.note?.let { note ->
-                meaningsSeparatedByComma.append(note)
+                if (note!="") {
+                    meaningsSeparatedByComma.append("(").append(note).append(")").append("\n")
+                }
             }
         }
     }

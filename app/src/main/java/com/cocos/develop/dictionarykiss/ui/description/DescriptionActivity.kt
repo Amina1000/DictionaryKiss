@@ -8,14 +8,20 @@ import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.databinding.ActivityDescriptionBinding
+import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
+import kotlinx.android.synthetic.main.activity_description.*
+import org.koin.android.scope.currentScope
 
 class DescriptionActivity : AppCompatActivity() {
 
     private val binding: ActivityDescriptionBinding by viewBinding(ActivityDescriptionBinding::bind)
+    private lateinit var model: DescriptionViewModel
+    private var data: DataModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +30,40 @@ class DescriptionActivity : AppCompatActivity() {
         setActionbarHomeButtonAsUp()
         binding.descriptionScreenSwipeRefreshLayout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
+        iniViewModel()
+        initView()
+    }
+
+    private fun initView() {
+        data?.let{dataModel->
+            favorite_fab.setOnClickListener {
+                if (dataModel.favorite){
+                    dataModel.favorite = false
+                    setFavoriteImageFab(dataModel.favorite)
+                    model.setData(dataModel)
+                }else{
+                    dataModel.favorite = true
+                    setFavoriteImageFab(dataModel.favorite)
+                    model.setData(dataModel)
+                }
+            }
+        }
+
+    }
+
+    private fun setFavoriteImageFab(favorite:Boolean){
+        if (favorite){
+            favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }else{
+            favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
+    }
+
+    private fun iniViewModel() {
+        injectDependencies()
+        val viewModel: DescriptionViewModel by currentScope.inject()
+        model = viewModel
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -44,7 +84,7 @@ class DescriptionActivity : AppCompatActivity() {
     private fun setData() {
 
         val bundle = intent.extras
-        binding.descriptionHeader.text = bundle?.getString(WORD_EXTRA)
+        binding.descriptionHeader.text =  bundle?.getString(WORD_EXTRA)
         binding.descriptionTextView.text = bundle?.getString(DESCRIPTION_EXTRA)
         binding.transcriptionWord.text = bundle?.getString(TRANSCRIPTION)
         binding.soundUrl.text = bundle?.getString(SOUND_URL)
