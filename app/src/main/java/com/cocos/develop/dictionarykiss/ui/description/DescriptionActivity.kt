@@ -33,13 +33,17 @@ class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
         binding.descriptionScreenSwipeRefreshLayout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
         iniViewModel()
+        initView()
+    }
 
-        dataEntity?.let{dataModel->
+    private fun initView() {
+        dataEntity?.let { dataModel ->
             favorite_fab.setOnClickListener {
                 dataModel.favorite = !dataModel.favorite
                 setFavoriteImageFab(dataModel.favorite)
                 model.setData(dataModel)
-            }}
+            }
+        }
     }
 
     private fun setFavoriteImageFab(favorite: Boolean) {
