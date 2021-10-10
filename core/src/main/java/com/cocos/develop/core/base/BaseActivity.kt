@@ -66,7 +66,7 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                             getString(R.string.empty_library)
                         )
                     } else {
-                        setDataToAdapter(it)
+                        setDataToScreen(it)
                     }
                 }
             }
@@ -110,5 +110,5 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                 }
             })
     }
-    abstract fun setDataToAdapter(data: List<DataModel>)
+    abstract fun setDataToScreen(data: List<DataModel>)
 }

@@ -39,7 +39,7 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
         initViews()
     }
 
-    override fun setDataToAdapter(data: List<DataModel>) {
+    override fun setDataToScreen(data: List<DataModel>) {
         adapter.setData(data)
     }
 

@@ -27,7 +27,4 @@ class MainInteractor (
         return appState
     }
 
-    suspend fun setData(dataModel: DataModel) {
-        repositoryLocal.saveToDB(dataModel)
-    }
 }

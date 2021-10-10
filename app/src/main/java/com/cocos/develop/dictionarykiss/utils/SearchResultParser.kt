@@ -42,9 +42,10 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
 
 fun convertMeaningsToString(meanings: List<Meanings>): String {
     val meaningsSeparatedByComma = StringBuilder()
+
     meanings.forEach { meaning ->
         meaning.translation?.let {
-            meaningsSeparatedByComma.append("-").append(it.translation).append("\n")
+            meaningsSeparatedByComma.append(it.translation).append("\n")
             it.note?.let { note ->
                 if (note!="") {
                     meaningsSeparatedByComma.append("(").append(note).append(")").append("\n")
@@ -52,5 +53,7 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
             }
         }
     }
+
+    meaningsSeparatedByComma.setLength(meaningsSeparatedByComma.length - 1)
     return meaningsSeparatedByComma.toString()
 }

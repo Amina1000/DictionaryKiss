@@ -59,12 +59,4 @@ class MainViewModel constructor(private val interactor: MainInteractor) :
         super.onCleared()
     }
 
-    fun setData(data: DataModel) {
-        viewModelCoroutineScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.setData(data)
-            }
-        }
-    }
-
 }

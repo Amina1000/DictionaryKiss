@@ -57,7 +57,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                model.setData(data)
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
@@ -196,7 +195,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
 
-    override fun setDataToAdapter(data: List<DataModel>) {
+    override fun setDataToScreen(data: List<DataModel>) {
         adapter.setData(data)
     }
 }

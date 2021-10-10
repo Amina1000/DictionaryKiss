@@ -4,25 +4,26 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.cocos.develop.core.base.BaseActivity
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.databinding.ActivityDescriptionBinding
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
+import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_description.*
 import org.koin.android.scope.currentScope
 
-class DescriptionActivity : AppCompatActivity() {
+class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
 
     private val binding: ActivityDescriptionBinding by viewBinding(ActivityDescriptionBinding::bind)
-    private lateinit var model: DescriptionViewModel
-    private var data: DataModel? = null
+    override lateinit var model: DescriptionViewModel
+    private var dataEntity: DataModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,18 +33,13 @@ class DescriptionActivity : AppCompatActivity() {
         binding.descriptionScreenSwipeRefreshLayout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
         iniViewModel()
-        initView()
-    }
 
-    private fun initView() {
-        data?.let { dataModel ->
-            setFavoriteImageFab(dataModel.favorite)
+        dataEntity?.let{dataModel->
             favorite_fab.setOnClickListener {
                 dataModel.favorite = !dataModel.favorite
                 setFavoriteImageFab(dataModel.favorite)
                 model.setData(dataModel)
-            }
-        }
+            }}
     }
 
     private fun setFavoriteImageFab(favorite: Boolean) {
@@ -58,6 +54,8 @@ class DescriptionActivity : AppCompatActivity() {
         injectDependencies()
         val viewModel: DescriptionViewModel by currentScope.inject()
         model = viewModel
+        model.getData("", false)
+        model.subscribe().observe(this@DescriptionActivity, { renderData(it) })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -78,13 +76,13 @@ class DescriptionActivity : AppCompatActivity() {
     private fun setData() {
 
         val bundle = intent.extras
-        data = bundle?.getParcelable(DATA_MODEL)
-        data?.let {
+        dataEntity = bundle?.getParcelable(DATA_MODEL)
+        dataEntity?.let {
             binding.descriptionHeader.text = it.text
             it.meanings?.also { listMeanings ->
                 binding.descriptionTextView.text = convertMeaningsToString(listMeanings)
                 binding.transcriptionWord.text = listMeanings.first().transcription
-                binding.soundUrl.text = String.format("https:%s",listMeanings.first().soundUrl)
+                binding.soundUrl.text = String.format("https:%s", listMeanings.first().soundUrl)
 
                 val imageLink = listMeanings.first().imageUrl
                 if (imageLink.isNullOrBlank()) {
@@ -133,6 +131,19 @@ class DescriptionActivity : AppCompatActivity() {
         ): Intent = Intent(context, DescriptionActivity::class.java).apply {
             putExtra(DATA_MODEL, dataModel)
         }
+    }
+
+    override fun setDataToScreen(data: List<DataModel>) {
+        data.forEach {
+            if (it.id == dataEntity?.id) {
+                dataEntity?.favorite = it.favorite
+            }
+       }
+        dataEntity?.let{dataModel->
+            setFavoriteImageFab(dataModel.favorite)
+            model.setData(dataModel)
+        }
+
     }
 
 }
