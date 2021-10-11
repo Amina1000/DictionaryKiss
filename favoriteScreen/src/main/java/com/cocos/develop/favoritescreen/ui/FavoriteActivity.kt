@@ -62,7 +62,7 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
         val itemDecoration =
             DividerItemDecoration(this@FavoriteActivity, GridLayoutManager.VERTICAL)
         itemDecoration.setDrawable(
-            ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical, null)!!
+            ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical_rv, null)!!
         )
         favoriteRecyclerview.addItemDecoration(itemDecoration)
     }

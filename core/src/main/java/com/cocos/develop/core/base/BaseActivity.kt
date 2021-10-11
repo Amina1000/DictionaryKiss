@@ -49,25 +49,20 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
     }
 
     protected fun showAlertDialog(title: String?, message: String?) {
-        AlertDialogFragment.newInstance(title, message).show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
+        AlertDialogFragment.newInstance(title, message)
+            .show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
     }
 
     private fun isDialogNull(): Boolean {
         return supportFragmentManager.findFragmentByTag(DIALOG_FRAGMENT_TAG) == null
     }
+
     protected fun renderData(appState: T) {
         when (appState) {
             is AppState.Success -> {
                 showViewWorking()
                 appState.data?.let {
-                    if (it.isEmpty()) {
-                        showAlertDialog(
-                            getString(R.string.dialog_title_attention),
-                            getString(R.string.empty_library)
-                        )
-                    } else {
-                        setDataToScreen(it)
-                    }
+                    setDataToScreen(it)
                 }
             }
             is AppState.Loading -> {
@@ -110,5 +105,6 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                 }
             })
     }
+
     abstract fun setDataToScreen(data: List<DataModel>)
 }
