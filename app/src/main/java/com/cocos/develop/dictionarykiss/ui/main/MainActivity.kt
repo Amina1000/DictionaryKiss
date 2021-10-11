@@ -85,9 +85,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
     private fun setDefaultSplashScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            setSplashScreenHideAnimation()
-        }
+        // пока скроем анимацию
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            setSplashScreenHideAnimation()
+//        }
 
         setSplashScreenDuration()
     }
@@ -97,7 +98,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         splashScreen.setOnExitAnimationListener { splashScreenView ->
             val slideLeft = ObjectAnimator.ofFloat(
                 splashScreenView,
-                View.TRANSLATION_X,
+                View.TRANSLATION_Y,
                 0f,
                 -splashScreenView.height.toFloat()
             )
