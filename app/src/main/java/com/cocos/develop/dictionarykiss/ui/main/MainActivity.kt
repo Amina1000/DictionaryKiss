@@ -2,7 +2,6 @@ package com.cocos.develop.dictionarykiss.ui.main
 
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.Menu
@@ -26,6 +25,13 @@ import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
@@ -35,8 +41,9 @@ import org.koin.android.scope.currentScope
 private const val SLIDE_LEFT_DURATION = 1000L
 private const val COUNTDOWN_DURATION = 2000L
 private const val COUNTDOWN_INTERVAL = 1000L
-private const val HISTORY_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
-private const val HISTORY_ACTIVITY_FEATURE_NAME = "favoriteScreen"
+private const val FAVORITE_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
+private const val FAVORITE_ACTIVITY_FEATURE_NAME = "favoriteScreen"
+private const val REQUEST_CODE = 38
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
@@ -75,6 +82,16 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 }
             }
         }
+    // Объявим переменную - она пригодится в дальнейшем
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val stateUpdatedListener: InstallStateUpdatedListener =
+        InstallStateUpdatedListener { p0 ->
+            if (p0.installStatus() == InstallStatus.DOWNLOADED) {
+                // Когда обновление скачалось и готово к установке, отображаем
+                // SnackBar
+                popupSnackbarForCompleteUpdate()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +99,96 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         setDefaultSplashScreen()
         iniViewModel()
         initViews()
+        checkForUpdates()
     }
+
+    // Сам метод вызываем в onCreate
+    private fun checkForUpdates() {
+        // Создаём менеджер
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        // Возвращает интент (appUpdateInfo), который мы будем использовать
+        // в качестве информации для обновления
+        val appUpdateInfo = appUpdateManager.appUpdateInfo
+
+        // Проверяем наличие обновления
+        appUpdateInfo.addOnSuccessListener { appUpdateIntent ->
+            if (appUpdateIntent.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                // Здесь мы делаем проверку на немедленный тип обновления
+                // (IMMEDIATE); для гибкого нужно передавать AppUpdateType.FLEXIBLE
+                && appUpdateIntent.isUpdateTypeAllowed(IMMEDIATE)
+            ) {
+                // Передаём слушатель прогресса (только для гибкого типа
+                // обновления)
+                appUpdateManager.registerListener(stateUpdatedListener)
+                // Выполняем запрос
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateIntent,
+                    IMMEDIATE,
+                    this,
+                    // Реквест-код для обработки запроса в onActivityResult
+                    REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Если всё в порядке, снимаем слушатель прогресса обновления
+                appUpdateManager.unregisterListener(stateUpdatedListener)
+            } else {
+                // Если обновление прервано (пользователь не принял или прервал
+                // его) или не загружено (из-за проблем с соединением), показываем
+                // уведомление (также можно показать диалоговое окно с предложением
+                // попробовать обновить еще раз)
+                Toast.makeText(
+                    applicationContext,
+                    "Update flow failed! Result code: $resultCode",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(
+            findViewById(R.id.activity_main_layout),
+            "An update has just been downloaded.",
+            Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction("RESTART") { appUpdateManager.completeUpdate() }
+            show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                // Обновление скачано, но не установлено
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    popupSnackbarForCompleteUpdate()
+                }
+                if (appUpdateInfo.updateAvailability()
+                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                ) {
+                    // Обновление прервано - можно возобновить установку
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        IMMEDIATE,
+                        this,
+                        REQUEST_CODE
+                    )
+                }
+            }
+
+    }
+
+
 
     private fun setDefaultSplashScreen() {
         // пока скроем анимацию
@@ -168,13 +274,13 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 val request =
                     SplitInstallRequest
                         .newBuilder()
-                        .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
+                        .addModule(FAVORITE_ACTIVITY_FEATURE_NAME)
                         .build()
 
                 splitInstallManager
                     .startInstall(request)
                     .addOnSuccessListener {
-                        val intent = Intent().setClassName(packageName, HISTORY_ACTIVITY_PATH)
+                        val intent = Intent().setClassName(packageName, FAVORITE_ACTIVITY_PATH)
                         startActivity(intent)
                     }
                     .addOnFailureListener {
@@ -189,7 +295,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
