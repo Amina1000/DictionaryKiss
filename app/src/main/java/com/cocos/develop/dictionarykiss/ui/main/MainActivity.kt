@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cocos.develop.core.base.BaseActivity
+import com.cocos.develop.dictionarykiss.BuildConfig
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
@@ -44,6 +46,7 @@ private const val COUNTDOWN_INTERVAL = 1000L
 private const val FAVORITE_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
 private const val FAVORITE_ACTIVITY_FEATURE_NAME = "favoriteScreen"
 private const val REQUEST_CODE = 38
+private const val FAVORITE_SCREEN_TAG = "install favorite screen"
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
@@ -82,6 +85,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 }
             }
         }
+
     // Объявим переменную - она пригодится в дальнейшем
     private lateinit var appUpdateManager: AppUpdateManager
     private val stateUpdatedListener: InstallStateUpdatedListener =
@@ -100,6 +104,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         iniViewModel()
         initViews()
         checkForUpdates()
+        installFavoriteScreen()
     }
 
     // Сам метод вызываем в onCreate
@@ -189,7 +194,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
 
-
     private fun setDefaultSplashScreen() {
         // пока скроем анимацию
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -242,7 +246,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
     private fun iniViewModel() {
-        check(main_activity_recyclerview.adapter == null) {getString(R.string.error_initialised)}
+        check(main_activity_recyclerview.adapter == null) { getString(R.string.error_initialised) }
         injectDependencies()
         val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
@@ -255,7 +259,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         mainRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
         mainRecyclerview.adapter = adapter
 
-        val itemDecoration =DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
+        val itemDecoration = DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
         itemDecoration.setDrawable(
             ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical, null)!!
         )
@@ -263,38 +267,45 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.favorite_menu,menu)
+        menuInflater.inflate(R.menu.favorite_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_favorite -> {
-                splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
-                val request =
-                    SplitInstallRequest
-                        .newBuilder()
-                        .addModule(FAVORITE_ACTIVITY_FEATURE_NAME)
-                        .build()
-
-                splitInstallManager
-                    .startInstall(request)
-                    .addOnSuccessListener {
-                        val intent = Intent().setClassName(packageName, FAVORITE_ACTIVITY_PATH)
-                        startActivity(intent)
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            applicationContext,
-                            "Couldn't download feature: " + it.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                if (splitInstallManager.installedModules.contains(FAVORITE_ACTIVITY_FEATURE_NAME)) {
+                    val intent = Intent().setClassName(BuildConfig.APPLICATION_ID, FAVORITE_ACTIVITY_PATH)
+                    startActivity(intent)
+                } else {
+                    Log.e(FAVORITE_SCREEN_TAG, "Registration feature is not installed")
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun installFavoriteScreen() {
+
+        splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
+        val request =
+            SplitInstallRequest
+                .newBuilder()
+                .addModule(FAVORITE_ACTIVITY_FEATURE_NAME)
+                .build()
+
+        splitInstallManager
+            .startInstall(request)
+            .addOnSuccessListener {
+                Log.d(FAVORITE_SCREEN_TAG, it.toString())
+            }
+
+            .addOnFailureListener {
+                Log.e(FAVORITE_SCREEN_TAG, it.toString())
+            }
+    }
+
 
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
