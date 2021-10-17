@@ -22,6 +22,7 @@ import com.cocos.develop.core.base.BaseActivity
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
+import com.cocos.develop.dictionarykiss.ui.history.HistoryActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
@@ -193,7 +194,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     }
 
-
     private fun setDefaultSplashScreen() {
         // пока скроем анимацию
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -279,6 +279,11 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 isInstalled()
                 true
             }
+            R.id.menu_history -> {
+                val intent = Intent(this, HistoryActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -292,7 +297,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
             } catch (ignored: ClassNotFoundException) {
                 ignored.message?.let { Log.e(FAVORITE_SCREEN_TAG, it) }
-
             }
         }
     }

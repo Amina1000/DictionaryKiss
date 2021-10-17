@@ -4,6 +4,9 @@ import androidx.room.Room
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionInteractor
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionViewModel
+import com.cocos.develop.dictionarykiss.ui.history.HistoryActivity
+import com.cocos.develop.dictionarykiss.ui.history.HistoryInteractor
+import com.cocos.develop.dictionarykiss.ui.history.HistoryViewModel
 import com.cocos.develop.dictionarykiss.ui.main.MainActivity
 import com.cocos.develop.dictionarykiss.ui.main.MainInteractor
 import com.cocos.develop.dictionarykiss.ui.main.MainViewModel
@@ -29,7 +32,7 @@ import org.koin.dsl.module
 fun injectDependencies() = loadModules
 
 private val loadModules by lazy {
-    loadKoinModules(listOf(application, mainScreen, descriptionScreen))
+    loadKoinModules(listOf(application, mainScreen, descriptionScreen, historyScreen))
 }
 
 val application = module {
@@ -54,6 +57,15 @@ val mainScreen = module {
     scope(named<MainActivity>()) {
         scoped { MainInteractor(get(), get()) }
         viewModel { MainViewModel(get()) }
+    }
+//    factory { MainInteractor(get(), get()) }
+//    factory { MainViewModel(get()) }
+}
+
+val historyScreen = module {
+    scope(named<HistoryActivity>()) {
+        scoped { HistoryInteractor(get()) }
+        viewModel { HistoryViewModel(get()) }
     }
 //    factory { MainInteractor(get(), get()) }
 //    factory { MainViewModel(get()) }

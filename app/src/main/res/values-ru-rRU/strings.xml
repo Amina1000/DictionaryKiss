@@ -12,4 +12,6 @@
     <string name="transcription_text">Транскрипция</string>
     <string name="add_to_favorite">добавить в избранное</string>
     <string name="empte_description_text">Вы не выбрали любимые слова. Найдите слово и нажмите на кнопку \"сердце\"</string>
+    <string name="empty_main_layout">Используйте кнопку поиска, для перевода слова</string>
+    <string name="my_history">История</string>
 </resources>
