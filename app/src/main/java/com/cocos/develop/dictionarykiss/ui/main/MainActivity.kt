@@ -14,11 +14,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cocos.develop.core.base.BaseActivity
-import com.cocos.develop.dictionarykiss.BuildConfig
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
@@ -251,7 +251,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
         model.getData("", false)
-        model.subscribe().observe(this@MainActivity, { renderData(it) })
+        model.subscribe().observe(this@MainActivity, {
+            renderData(it)
+            empty_linear_layout.isVisible = emptyLayout})
     }
 
     private fun initViews() {
@@ -274,15 +276,24 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_favorite -> {
-                if (splitInstallManager.installedModules.contains(FAVORITE_ACTIVITY_FEATURE_NAME)) {
-                    val intent = Intent().setClassName(BuildConfig.APPLICATION_ID, FAVORITE_ACTIVITY_PATH)
-                    startActivity(intent)
-                } else {
-                    Log.e(FAVORITE_SCREEN_TAG, "Registration feature is not installed")
-                }
+                isInstalled()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun isInstalled() {
+        if (splitInstallManager.installedModules.contains(FAVORITE_ACTIVITY_FEATURE_NAME)) {
+            try {
+                val classFavorite = Class.forName(FAVORITE_ACTIVITY_PATH, false, javaClass.classLoader)
+                val intent = Intent(this, classFavorite)
+                startActivity(intent)
+
+            } catch (ignored: ClassNotFoundException) {
+                ignored.message?.let { Log.e(FAVORITE_SCREEN_TAG, it) }
+
+            }
         }
     }
 

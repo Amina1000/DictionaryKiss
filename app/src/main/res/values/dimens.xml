@@ -5,4 +5,8 @@
     <dimen name="max_icon_size">70dp</dimen>
     <dimen name="separator">10dp</dimen>
     <dimen name="card_height">150dp</dimen>
+    <dimen name="margin_xxxl_large">50dp</dimen>
+    <dimen name="elevation_s">8dp</dimen>
+    <dimen name="corner_radius_m">20dp</dimen>
+    <dimen name="margin_text_buttom_large">150dp</dimen>
 </resources>

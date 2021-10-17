@@ -27,6 +27,7 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
 
     abstract val model: BaseViewModel<T>
     protected var isNetworkAvailable: Boolean = true
+    protected var emptyLayout:Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -61,7 +62,10 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
         when (appState) {
             is AppState.Success -> {
                 showViewWorking()
-                appState.data?.let {
+                 appState.data?.let {
+                    if (it.isEmpty()) {
+                        emptyLayout = true
+                    }
                     setDataToScreen(it)
                 }
             }

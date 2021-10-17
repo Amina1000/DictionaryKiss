@@ -1,55 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <FrameLayout
+        android:id="@+id/empty_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_x_medium"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_s"
+            app:cardCornerRadius="@dimen/corner_radius_m">
+            <androidx.appcompat.widget.AppCompatImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/screenshot_searching" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin_text_buttom_large"
+            android:gravity="bottom|center"
+            android:text="@string/empty_main_layout"
+            android:textColor="@color/color_accent"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="bottom|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/color_gray"
+            android:layout_marginBottom="@dimen/margin_xxxl_large"
+            android:src="@drawable/ic_baseline_arrow_downward" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/success_linear_layout"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_activity_recyclerview"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_fab"
-            android:src="@drawable/ic_search"
             android:layout_width="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_medium"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_button"/>
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:backgroundTint="@color/color_button"
+            android:src="@drawable/ic_search" />
     </FrameLayout>
 
-    <include layout="@layout/loading_layout"/>
+    <include layout="@layout/loading_layout" />
 
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
         android:id="@+id/error_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/error_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/error_stub"/>
+            android:text="@string/error_stub" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reload_button"/>
+            android:text="@string/reload_button" />
     </LinearLayout>
+
 </FrameLayout>

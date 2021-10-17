@@ -23,4 +23,6 @@
     <string name="error_stub">Error</string>
     <string name="text_local" translatable="false">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</string>
     <string name="add_to_favorite">add to favorite</string>
+    <string name="empte_description_text">You didn\'t pick any favorite words yet.\n\n Find the word, and push heart button</string>
+    <string name="empty_main_layout">Use the search button to find translations and meanings of words</string>
 </resources>
