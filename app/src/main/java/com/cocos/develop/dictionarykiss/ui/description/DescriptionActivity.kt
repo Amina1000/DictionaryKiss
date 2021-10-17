@@ -2,7 +2,11 @@ package com.cocos.develop.dictionarykiss.ui.description
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.MenuItem
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.cocos.develop.core.base.BaseActivity
@@ -18,6 +22,7 @@ import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_description.*
 import org.koin.android.scope.currentScope
+import java.util.regex.Pattern
 
 class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
 
@@ -82,11 +87,19 @@ class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
         val bundle = intent.extras
         dataEntity = bundle?.getParcelable(DATA_MODEL)
         dataEntity?.let {
+
             binding.descriptionHeader.text = it.text
+
             it.meanings?.also { listMeanings ->
+
                 binding.descriptionTextView.text = convertMeaningsToString(listMeanings)
                 binding.transcriptionWord.text = listMeanings.first().transcription
-                binding.soundUrl.text = String.format("https:%s", listMeanings.first().soundUrl)
+                binding.soundUrl.text =
+                    String.format(
+                        getString(R.string.sound_link) + "\n https:%s",
+                        listMeanings.first().soundUrl
+                    )
+                Linkify.addLinks(binding.soundUrl, Linkify.WEB_URLS)
 
                 val imageLink = listMeanings.first().imageUrl
                 if (imageLink.isNullOrBlank()) {
@@ -142,8 +155,8 @@ class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
             if (it.id == dataEntity?.id) {
                 dataEntity?.favorite = it.favorite
             }
-       }
-        dataEntity?.let{dataModel->
+        }
+        dataEntity?.let { dataModel ->
             setFavoriteImageFab(dataModel.favorite)
             model.setData(dataModel)
         }

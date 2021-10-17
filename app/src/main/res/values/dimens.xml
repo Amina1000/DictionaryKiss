@@ -9,4 +9,6 @@
     <dimen name="elevation_s">8dp</dimen>
     <dimen name="corner_radius_m">20dp</dimen>
     <dimen name="margin_text_buttom_large">150dp</dimen>
+    <dimen name="search_text_size">32sp</dimen>
+    <dimen name="clear_text_image_size">32dp</dimen>
 </resources>
