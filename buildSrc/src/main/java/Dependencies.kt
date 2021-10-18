@@ -15,8 +15,8 @@ object Config {
 }
 
 object Releases {
-    const val version_code = 10
-    const val version_name = "10.0"
+    const val version_code = 11
+    const val version_name = "11.0"
 }
 
 object Modules {

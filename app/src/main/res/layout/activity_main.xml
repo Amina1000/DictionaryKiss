@@ -7,19 +7,22 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/empty_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_x_medium"
+        android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:elevation="@dimen/elevation_s"
             app:cardCornerRadius="@dimen/corner_radius_m">
+
             <androidx.appcompat.widget.AppCompatImageView
 
                 android:layout_width="wrap_content"
@@ -27,24 +30,35 @@
                 android:src="@drawable/screenshot_search" />
         </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.textview.MaterialTextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_text_buttom_large"
-            android:gravity="bottom|center"
-            android:text="@string/empty_main_layout"
-            android:textColor="@color/color_accent"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold" />
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_xx_medium"
+            android:layout_marginBottom="@dimen/margin_xxx_large">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_gravity="bottom|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="@color/color_gray"
-            android:layout_marginBottom="@dimen/margin_xxxl_large"
-            android:src="@drawable/ic_baseline_arrow_downward" />
-    </FrameLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_standard_header"
+                android:text="@string/empty_main_layout"
+                android:textColor="@color/color_accent"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:src="@drawable/ic_baseline_arrow_downward"
+                android:tint="@color/color_gray" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/success_linear_layout"

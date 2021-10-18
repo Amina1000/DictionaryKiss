@@ -2,6 +2,7 @@ package com.cocos.develop.dictionarykiss.ui.history
 
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,8 @@ import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
 import kotlinx.android.synthetic.main.activity_history.*
+import kotlinx.android.synthetic.main.activity_history.empty_linear_layout
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.scope.currentScope
 
 class HistoryActivity : BaseActivity<AppState, MainInteractor>() {
@@ -49,7 +52,9 @@ class HistoryActivity : BaseActivity<AppState, MainInteractor>() {
         val viewModel: HistoryViewModel by currentScope.inject()
         model = viewModel
         model.getData("", false)
-        model.subscribe().observe(this@HistoryActivity, { renderData(it) })
+        model.subscribe().observe(this@HistoryActivity, {
+            renderData(it)
+            empty_linear_layout.isVisible = emptyLayout})
 
     }
 

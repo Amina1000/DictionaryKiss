@@ -26,4 +26,5 @@
     <string name="empte_description_text">You didn\'t pick any favorite words yet.\n\n Find the word, and push heart button</string>
     <string name="empty_main_layout">Use the search button to find translations and meanings of words</string>
     <string name="my_history">my history</string>
+    <string name="history_instructions">You do not have any history yet. It will appear if you will push the search button and open the selected word</string>
 </resources>

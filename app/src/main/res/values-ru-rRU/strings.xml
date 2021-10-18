@@ -15,4 +15,5 @@
     <string name="empty_main_layout">Используйте кнопку поиска, для перевода слова</string>
     <string name="my_history">История</string>
     <string name="sound_link">Прослушать звучание</string>
+    <string name="history_instructions">У вас пока отсутствует история. Она появится, если вы используете кнопку поиска и откроете выбранное слово</string>
 </resources>
