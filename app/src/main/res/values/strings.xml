@@ -19,8 +19,12 @@
     <string name="my_favorite">my favorite</string>
     <string name="title_favoritefeature" translatable="false">Favorite Screen Feature</string>
     <string name="transcription_text">transcription</string>
-    <string name="sound_link" translatable="false">Sound link: dictionary.skyeng.ru</string>
+    <string name="sound_link">Sound link</string>
     <string name="error_stub">Error</string>
     <string name="text_local" translatable="false">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</string>
     <string name="add_to_favorite">add to favorite</string>
+    <string name="empte_description_text">You didn\'t pick any favorite words yet.\n\n Find the word, and push heart button</string>
+    <string name="empty_main_layout">Use the search button to find translations and meanings of words</string>
+    <string name="my_history">my history</string>
+    <string name="history_instructions">You do not have any history yet. It will appear if you will push the search button and open the selected word</string>
 </resources>

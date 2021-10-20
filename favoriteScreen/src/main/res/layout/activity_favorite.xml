@@ -7,6 +7,30 @@
     tools:context="com.cocos.develop.favoritescreen.ui.FavoriteActivity">
 
     <FrameLayout
+        android:id="@+id/empty_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_favorite_border_24"
+            android:tint="@color/purple_500"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_xxx_large"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            android:textColor="@color/color_accent"
+            android:text="@string/empte_description_text"/>
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/success_linear_layout"
         android:layout_width="match_parent"
         android:gravity="center"

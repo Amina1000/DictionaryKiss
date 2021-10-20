@@ -17,7 +17,7 @@ fun AppCompatImageView.loadImageFromResource(imageUrl: String?) {
         Picasso
             .get()
             .load("https:$it")
-            .placeholder(R.drawable.ic_no_photo_vector).fit().centerCrop()
+            .placeholder(R.drawable.ic_no_photo_screen).fit().centerCrop()
             .into(this)
     }
 

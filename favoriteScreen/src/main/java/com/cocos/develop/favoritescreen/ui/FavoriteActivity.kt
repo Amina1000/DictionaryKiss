@@ -2,6 +2,7 @@ package com.cocos.develop.favoritescreen.ui
 
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +54,9 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
         injectDependencies()
         val viewModel: FavoriteViewModel by currentScope.inject()
         model = viewModel
-        model.subscribe().observe(this@FavoriteActivity, { renderData(it) })
+        model.subscribe().observe(this@FavoriteActivity, {
+            renderData(it)
+            empty_linear_layout.isVisible = emptyLayout})
     }
 
     private fun initViews() {
@@ -62,7 +65,7 @@ class FavoriteActivity : BaseActivity<AppState, FavoriteInteractor>() {
         val itemDecoration =
             DividerItemDecoration(this@FavoriteActivity, GridLayoutManager.VERTICAL)
         itemDecoration.setDrawable(
-            ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical, null)!!
+            ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical_rv, null)!!
         )
         favoriteRecyclerview.addItemDecoration(itemDecoration)
     }
