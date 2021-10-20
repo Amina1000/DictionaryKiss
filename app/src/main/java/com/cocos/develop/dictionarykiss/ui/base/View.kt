@@ -1,9 +1,9 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.base
+package com.cocos.develop.dictionarykiss.ui.base
 
 import com.cocos.develop.dictionarykiss.domain.AppState
 
 /**
- * homework com.cocos.develop.dictionarykiss.presentation.ui.base
+ * homework com.cocos.develop.dictionarykiss.ui.base
  *
  * @author Amina
  * 25.08.2021

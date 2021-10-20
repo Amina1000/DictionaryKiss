@@ -1,4 +1,4 @@
-package com.cocos.develop.dictionarykiss.presentation.ui.base
+package com.cocos.develop.dictionarykiss.ui.viewModel
 
 import io.reactivex.Observable
 
