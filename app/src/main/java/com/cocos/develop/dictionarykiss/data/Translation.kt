@@ -1,5 +1,6 @@
 package com.cocos.develop.dictionarykiss.data
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 /**

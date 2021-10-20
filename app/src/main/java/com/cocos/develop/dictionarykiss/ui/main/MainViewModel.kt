@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @author Amina
  * 02.09.2021
  */
-class MainViewModel @Inject constructor(private val interactor: MainInteractor) :
+class MainViewModel constructor(private val interactor: MainInteractor) :
     BaseViewModel<AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
