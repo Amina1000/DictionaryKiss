@@ -62,11 +62,11 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                 appState.data?.let {
                     if (it.isEmpty()) {
                         showAlertDialog(
-                            getString(R.string.dialog_title_sorry),
-                            getString(R.string.empty_server_response_on_success)
+                            getString(R.string.dialog_title_attention),
+                            getString(R.string.empty_library)
                         )
                     } else {
-                        setDataToAdapter(it)
+                        setDataToScreen(it)
                     }
                 }
             }
@@ -110,5 +110,5 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
                 }
             })
     }
-    abstract fun setDataToAdapter(data: List<DataModel>)
+    abstract fun setDataToScreen(data: List<DataModel>)
 }

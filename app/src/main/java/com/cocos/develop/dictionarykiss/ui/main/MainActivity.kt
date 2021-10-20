@@ -22,8 +22,8 @@ import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
-import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.ui.viewById
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.play.core.splitinstall.SplitInstallManager
@@ -56,15 +56,11 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: com.cocos.develop.model.data.DataModel) {
+            override fun onItemClick(data: DataModel) {
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
-                        data.text!!,
-                        convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl,
-                        data.meanings!![0].transcription,
-                        data.meanings!![0].soundUrl
+                        data
                     )
                 )
             }
@@ -89,9 +85,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
     private fun setDefaultSplashScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            setSplashScreenHideAnimation()
-        }
+        // пока скроем анимацию
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            setSplashScreenHideAnimation()
+//        }
 
         setSplashScreenDuration()
     }
@@ -101,7 +98,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         splashScreen.setOnExitAnimationListener { splashScreenView ->
             val slideLeft = ObjectAnimator.ofFloat(
                 splashScreenView,
-                View.TRANSLATION_X,
+                View.TRANSLATION_Y,
                 0f,
                 -splashScreenView.height.toFloat()
             )
@@ -199,7 +196,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
 
-    override fun setDataToAdapter(data: List<com.cocos.develop.model.data.DataModel>) {
+    override fun setDataToScreen(data: List<DataModel>) {
         adapter.setData(data)
     }
 }

@@ -13,7 +13,12 @@ class RepositoryImplementationLocal(private val dataSource: DataSourceLocal<List
         return dataSource.getData(word)
     }
 
-    override suspend fun saveToDB(appState: AppState) {
-        dataSource.saveToDB(appState)
+    override suspend fun saveToDB(dataModel: DataModel) {
+        dataSource.saveToDB(dataModel)
     }
+
+    override suspend fun getFavorite(): List<DataModel> {
+       return dataSource.getFavorite()
+    }
+
 }

@@ -2,6 +2,7 @@
     <string name="error_stub">Error</string>
     <string name="undefined_error">Undefined error</string>
     <string name="empty_server_response_on_success">Response from server is empty</string>
+    <string name="empty_library">The library is empty, use the search</string>
     <string name="delete_description">X</string>
     <string name="dialog_title_device_is_offline">No internet connection</string>
     <string name="error_initialised">The ViewModel should be initialised first</string>
@@ -10,5 +11,5 @@
     </string>
     <string name="dialog_button_cancel">Cancel</string>
     <string name="dialog_title_stub">Undefined error</string>
-    <string name="dialog_title_sorry">Sorry</string>
+    <string name="dialog_title_attention">Attention</string>
 </resources>

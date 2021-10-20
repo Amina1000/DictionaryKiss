@@ -20,9 +20,13 @@ class RoomDataBaseImplementation(private val historyDao: HistoryDao) :
         return mapHistoryEntityToSearchResult(historyDao.all())
     }
 
-    override suspend fun saveToDB(appState: AppState) {
-        convertDataModelSuccessToEntity(appState)?.let {
+    override suspend fun saveToDB(dataModel: DataModel) {
+        convertDataModelSuccessToEntity(dataModel).also {
             historyDao.insert(it)
         }
+    }
+
+    override suspend fun getFavorite(): List<DataModel> {
+        return mapHistoryEntityToSearchResult(historyDao.getFavorite())
     }
 }

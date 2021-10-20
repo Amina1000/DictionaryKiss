@@ -4,23 +4,62 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.cocos.develop.core.base.BaseActivity
 import com.cocos.develop.dictionarykiss.R
+import com.cocos.develop.dictionarykiss.databinding.ActivityDescriptionBinding
+import com.cocos.develop.dictionarykiss.di.injectDependencies
+import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
+import com.cocos.develop.model.data.AppState
+import com.cocos.develop.model.data.DataModel
 import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_description.*
+import org.koin.android.scope.currentScope
 
-class DescriptionActivity : AppCompatActivity() {
+class DescriptionActivity : BaseActivity<AppState, DescriptionInteractor>() {
+
+    private val binding: ActivityDescriptionBinding by viewBinding(ActivityDescriptionBinding::bind)
+    override lateinit var model: DescriptionViewModel
+    private var dataEntity: DataModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_description)
 
         setActionbarHomeButtonAsUp()
-        description_screen_swipe_refresh_layout.setOnRefreshListener { startLoadingOrShowError() }
+        binding.descriptionScreenSwipeRefreshLayout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
+        iniViewModel()
+        initView()
+    }
+
+    private fun initView() {
+        dataEntity?.let { dataModel ->
+            favorite_fab.setOnClickListener {
+                dataModel.favorite = !dataModel.favorite
+                setFavoriteImageFab(dataModel.favorite)
+                model.setData(dataModel)
+            }
+        }
+    }
+
+    private fun setFavoriteImageFab(favorite: Boolean) {
+        if (favorite) {
+            favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            favorite_fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
+    }
+
+    private fun iniViewModel() {
+        injectDependencies()
+        val viewModel: DescriptionViewModel by currentScope.inject()
+        model = viewModel
+        model.getData("", false)
+        model.subscribe().observe(this@DescriptionActivity, { renderData(it) })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -41,22 +80,27 @@ class DescriptionActivity : AppCompatActivity() {
     private fun setData() {
 
         val bundle = intent.extras
-        description_header.text = bundle?.getString(WORD_EXTRA)
-        description_textview.text = bundle?.getString(DESCRIPTION_EXTRA)
-        transcription.text = bundle?.getString(TRANSCRIPTION)
-        soundUrl.text = bundle?.getString(SOUND_URL)
+        dataEntity = bundle?.getParcelable(DATA_MODEL)
+        dataEntity?.let {
+            binding.descriptionHeader.text = it.text
+            it.meanings?.also { listMeanings ->
+                binding.descriptionTextView.text = convertMeaningsToString(listMeanings)
+                binding.transcriptionWord.text = listMeanings.first().transcription
+                binding.soundUrl.text = String.format("https:%s", listMeanings.first().soundUrl)
 
-        val imageLink = bundle?.getString(URL_EXTRA)
-        if (imageLink.isNullOrBlank()) {
-            stopRefreshAnimationIfNeeded(
-                description_screen_swipe_refresh_layout
-            )
-        } else {
-            description_imageview.usePicassoToLoadPhoto(
-                imageLink,
-                description_screen_swipe_refresh_layout
-            )
-            //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
+                val imageLink = listMeanings.first().imageUrl
+                if (imageLink.isNullOrBlank()) {
+                    stopRefreshAnimationIfNeeded(
+                        binding.descriptionScreenSwipeRefreshLayout
+                    )
+                } else {
+                    binding.descriptionImageview.usePicassoToLoadPhoto(
+                        imageLink,
+                        binding.descriptionScreenSwipeRefreshLayout
+                    )
+                    //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
+                }
+            }
         }
     }
 
@@ -74,7 +118,7 @@ class DescriptionActivity : AppCompatActivity() {
                         supportFragmentManager,
                         DIALOG_FRAGMENT_TAG
                     )
-                    stopRefreshAnimationIfNeeded(description_screen_swipe_refresh_layout)
+                    stopRefreshAnimationIfNeeded(binding.descriptionScreenSwipeRefreshLayout)
                 }
             })
     }
@@ -82,27 +126,28 @@ class DescriptionActivity : AppCompatActivity() {
     companion object {
 
         private const val DIALOG_FRAGMENT_TAG = "8c7dff51-9769-4f6d-bbee-a3896085e76e"
-        private const val WORD_EXTRA = "f76a288a-5dcc-43f1-ba89-7fe1d53f63b0"
-        private const val DESCRIPTION_EXTRA = "0eeb92aa-520b-4fd1-bb4b-027fbf963d9a"
-        private const val URL_EXTRA = "6e4b154d-e01f-4953-a404-639fb3bf7281"
-        private const val TRANSCRIPTION = "5e4b154d-e01f-4953-a404-639fb3bf7281"
-        private const val SOUND_URL = "8e4b154d-e01f-4953-a404-639fb3bf7281"
-
+        private const val DATA_MODEL = "e76a288a-5dcc-43f1-ba89-7fe1d53f63b8"
 
         fun getIntent(
             context: Context,
-            word: String,
-            description: String,
-            url: String?,
-            transcription: String?,
-            soundUrl: String?
+            dataModel: DataModel?
 
         ): Intent = Intent(context, DescriptionActivity::class.java).apply {
-            putExtra(WORD_EXTRA, word)
-            putExtra(DESCRIPTION_EXTRA, description)
-            putExtra(URL_EXTRA, url)
-            putExtra(TRANSCRIPTION, transcription)
-            putExtra(SOUND_URL, soundUrl)
+            putExtra(DATA_MODEL, dataModel)
         }
     }
+
+    override fun setDataToScreen(data: List<DataModel>) {
+        data.forEach {
+            if (it.id == dataEntity?.id) {
+                dataEntity?.favorite = it.favorite
+            }
+       }
+        dataEntity?.let{dataModel->
+            setFavoriteImageFab(dataModel.favorite)
+            model.setData(dataModel)
+        }
+
+    }
+
 }

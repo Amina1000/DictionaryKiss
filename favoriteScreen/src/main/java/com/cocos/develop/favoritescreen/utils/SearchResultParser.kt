@@ -31,21 +31,10 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
             }
         }
         if (newMeanings.isNotEmpty()) {
-            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings))
+            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings, dataModel.favorite))
         }
     }
 }
 
-fun convertMeaningsToString(meanings: List<Meanings>): String {
-    var meaningsSeparatedByComma = StringBuilder()
-    meanings.forEach { meaning ->
-        meaning.translation?.let {
-            meaningsSeparatedByComma.append(it.translation)
-            it.note?.let { note ->
-                meaningsSeparatedByComma.append(note)
-            }
-        }
-    }
-    return meaningsSeparatedByComma.toString()
-}
+
 

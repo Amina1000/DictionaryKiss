@@ -71,11 +71,15 @@ dependencies {
     implementation Retrofit.logging_interceptor
     implementation Retrofit.adapter_rx
     implementation Retrofit.adapter_coroutines
-    //??
+
+    //androidx
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
+    // To use only without reflection variants of viewBinding
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.0-beta01'
+    
     //Test
     testImplementation TestImpl.junit
     androidTestImplementation TestImpl.testExt

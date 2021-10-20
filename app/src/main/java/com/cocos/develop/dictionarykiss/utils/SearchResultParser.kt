@@ -35,20 +35,25 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
             }
         }
         if (newMeanings.isNotEmpty()) {
-            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings))
+            newDataModels.add(DataModel(dataModel.id, dataModel.text, newMeanings, dataModel.favorite))
         }
     }
 }
 
 fun convertMeaningsToString(meanings: List<Meanings>): String {
-    var meaningsSeparatedByComma = StringBuilder()
+    val meaningsSeparatedByComma = StringBuilder()
+
     meanings.forEach { meaning ->
         meaning.translation?.let {
-            meaningsSeparatedByComma.append(it.translation)
+            meaningsSeparatedByComma.append(it.translation).append("\n")
             it.note?.let { note ->
-                meaningsSeparatedByComma.append(note)
+                if (note!="") {
+                    meaningsSeparatedByComma.append("(").append(note).append(")").append("\n")
+                }
             }
         }
     }
+
+    meaningsSeparatedByComma.setLength(meaningsSeparatedByComma.length - 1)
     return meaningsSeparatedByComma.toString()
 }

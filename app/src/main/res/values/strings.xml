@@ -1,23 +1,26 @@
 <resources>
-    <string name="app_name">Dictionary Kiss</string>
-    <string name="error_stub">Error</string>
-    <string name="reload_button">Reload</string>
-    <string name="undefined_error">Undefined error</string>
+    <string name="app_name" translatable="false">Dictionary Kiss</string>
+    <string name="reload_button" translatable="false">Reload</string>
+    <string name="undefined_error" translatable="false">Undefined error</string>
     <string name="empty_server_response_on_success">Response from server is empty</string>
     <string name="button_search">Search</string>
     <string name="search_hint">New word</string>
-    <string name="image_stub">image</string>
-    <string name="delete_description">X</string>
+    <string name="image_stub" translatable="false">image</string>
+    <string name="delete_description" translatable="false">X</string>
     <string name="dialog_title_device_is_offline">No internet connection</string>
-    <string name="error_initialised">The ViewModel should be initialised first</string>
-    <string name="dialog_message_device_is_offline">You can not use app without internet connection. Please, check
+    <string name="error_initialised" translatable="false">The ViewModel should be initialised first</string>
+    <string name="dialog_message_device_is_offline" translatable="false">You can not use app without internet connection. Please, check
         internet connection.
     </string>
-    <string name="dialog_button_cancel">Cancel</string>
-    <string name="dialog_title_stub">Undefined error</string>
-    <string name="dialog_title_sorry">Sorry</string>
+    <string name="dialog_button_cancel">Close</string>
+    <string name="dialog_title_stub" translatable="false">Undefined error</string>
+    <string name="dialog_title_attention">Attention</string>
+    <string name="empty_library">The library is empty, use the search</string>
     <string name="my_favorite">my favorite</string>
-    <string name="title_favoritefeature">Favorite Screen Feature</string>
-    <string name="transcription_text">transcription:</string>
-    <string name="sound_link">Sound link: dictionary.skyeng.ru</string>
+    <string name="title_favoritefeature" translatable="false">Favorite Screen Feature</string>
+    <string name="transcription_text">transcription</string>
+    <string name="sound_link" translatable="false">Sound link: dictionary.skyeng.ru</string>
+    <string name="error_stub">Error</string>
+    <string name="text_local" translatable="false">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</string>
+    <string name="add_to_favorite">add to favorite</string>
 </resources>

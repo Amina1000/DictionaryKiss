@@ -24,5 +24,7 @@ class HistoryEntity(
     @field:ColumnInfo(name = "transcription")
     var transcription: String?,
     @field:ColumnInfo(name = "soundUrl")
-    var soundUrl: String?
+    var soundUrl: String?,
+    @field:ColumnInfo(name = "favorite")
+    var favorite: Boolean = false
 )

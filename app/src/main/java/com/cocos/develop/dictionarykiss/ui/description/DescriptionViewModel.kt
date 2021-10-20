@@ -1,22 +1,20 @@
-package com.cocos.develop.dictionarykiss.ui.main
+package com.cocos.develop.dictionarykiss.ui.description
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.cocos.develop.core.viewModel.BaseViewModel
 import com.cocos.develop.dictionarykiss.utils.parseSearchResults
 import com.cocos.develop.model.data.AppState
 import com.cocos.develop.model.data.DataModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
- * homework com.cocos.develop.dictionarykiss.ui.main
+ * homework com.cocos.develop.dictionarykiss.ui.description
  *
  * @author Amina
- * 02.09.2021
+ * 09.10.2021
  */
-class MainViewModel constructor(private val interactor: MainInteractor) :
-    BaseViewModel<AppState>() {
+class DescriptionViewModel(private val interactor: DescriptionInteractor): BaseViewModel<AppState>(){
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 
@@ -32,12 +30,6 @@ class MainViewModel constructor(private val interactor: MainInteractor) :
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
     }
 
-    // Добавляем suspend
-    // withContext(Dispatchers.IO) указывает, что доступ в сеть должен
-    // осуществляться через диспетчер IO (который предназначен именно для таких
-    // операций), хотя это и не обязательно указывать явно, потому что Retrofit
-    // и так делает это благодаря CoroutineCallAdapterFactory(). Это же
-    // касается и Room
     private suspend fun startInteractor(word: String, isOnline: Boolean) =
         withContext(Dispatchers.IO) {
             _mutableLiveData.postValue(
@@ -57,6 +49,14 @@ class MainViewModel constructor(private val interactor: MainInteractor) :
     override fun onCleared() {
         _mutableLiveData.value = AppState.Success(null)
         super.onCleared()
+    }
+
+    fun setData(data: DataModel) {
+        viewModelCoroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.setData(data)
+            }
+        }
     }
 
 }
