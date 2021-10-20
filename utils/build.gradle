@@ -1,0 +1,28 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    //Kotlin
+    implementation Kotlin.core
+    implementation Kotlin.stdlib
+    // Design
+    // Нельзя использовать зависимости com.android.support
+    // и com.google.android.material вместе
+    implementation Design.material
+    implementation Design.appcompat
+    //Download images
+    //Picasso
+    implementation Picasso.picasso
+    //Glide
+    implementation Glide.glide
+    kapt Glide.glide_compiler
+    //Test
+    testImplementation TestImpl.junit
+    androidTestImplementation TestImpl.testExt
+    androidTestImplementation TestImpl.espresso
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+}

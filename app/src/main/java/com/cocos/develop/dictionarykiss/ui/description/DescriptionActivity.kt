@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.cocos.develop.dictionarykiss.R
-import com.cocos.develop.dictionarykiss.utils.network.isOnline
+import com.cocos.develop.utils.network.isOnline
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
-import geekbrains.ru.translator.utils.ui.AlertDialogFragment
+import com.cocos.develop.utils.ui.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_description.*
 
 class DescriptionActivity : AppCompatActivity() {
@@ -44,7 +44,9 @@ class DescriptionActivity : AppCompatActivity() {
         description_textview.text = bundle?.getString(DESCRIPTION_EXTRA)
         val imageLink = bundle?.getString(URL_EXTRA)
         if (imageLink.isNullOrBlank()) {
-            stopRefreshAnimationIfNeeded(description_screen_swipe_refresh_layout)
+            stopRefreshAnimationIfNeeded(
+                description_screen_swipe_refresh_layout
+            )
         } else {
             description_imageview.usePicassoToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
             //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
@@ -62,7 +64,9 @@ class DescriptionActivity : AppCompatActivity() {
                 supportFragmentManager,
                 DIALOG_FRAGMENT_TAG
             )
-            stopRefreshAnimationIfNeeded(description_screen_swipe_refresh_layout)
+            stopRefreshAnimationIfNeeded(
+                description_screen_swipe_refresh_layout
+            )
         }
     }
 

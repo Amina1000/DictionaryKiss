@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/radius"
     app:cardElevation="@dimen/elevation">
 
     <LinearLayout
@@ -17,7 +16,7 @@
 
         <TextView
             android:id="@+id/header_textview_recycler_item"
-            style="@style/HeaderTextStyle"
+            style="@style/TextViewButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
@@ -43,13 +42,14 @@
                 android:layout_weight="1"
                 app:cardCornerRadius="@dimen/radius"
                 android:layout_marginEnd="@dimen/margin_small"
-                android:backgroundTint="@color/color_gray"
+                android:backgroundTint="@color/ic_launcher_background"
                 app:cardElevation="@dimen/elevation">
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_url"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:layout_margin="@dimen/margin_xx_small"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_search" />
             </androidx.cardview.widget.CardView>
 
