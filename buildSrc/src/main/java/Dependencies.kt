@@ -31,6 +31,9 @@ object Modules {
 
 object Versions {
 
+    //Tools
+    const val multidex = "1.0.3"
+
     //Design
     const val appcompat = "1.3.1"
     const val material = "1.4.0"
@@ -65,6 +68,9 @@ object Versions {
     const val roomKtx = "2.4.0-alpha04"
     const val runtime = "2.4.0-alpha04"
     const val roomCompiler = "2.4.0-alpha04"
+
+    //Google Play
+    const val googlePlayCore = "1.10.1"
 
     //Test
     const val jUnit = "4.13.2"
@@ -120,4 +126,12 @@ object TestImpl {
     const val junit = "junit:junit:${Versions.jUnit}"
     const val testExt = "androidx.test.ext:junit:${Versions.testExt}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
+}
+
+object GooglePlay {
+    const val googlePlayCore = "com.google.android.play:core:${Versions.googlePlayCore}"
+}
+
+object Tools {
+    const val multidex = "com.android.support:multidex:${Versions.multidex}"
 }

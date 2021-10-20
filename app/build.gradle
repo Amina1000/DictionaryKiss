@@ -35,6 +35,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    dynamicFeatures = [Modules.favoriteScreen]
 }
 
 dependencies {
@@ -44,7 +46,6 @@ dependencies {
     implementation project(Modules.model)
     implementation project(Modules.repository)
     implementation project(Modules.utils)
-    implementation project(Modules.favoriteScreen) //Feature
 
     //Kotlin
     implementation Kotlin.core
@@ -102,5 +103,11 @@ dependencies {
     implementation Room.runtime
     kapt Room.compiler
     implementation Room.room_ktx
+
+    //Google Play libraries
+    implementation GooglePlay.googlePlayCore
+
+    //Tools
+    implementation Tools.multidex
 
 }

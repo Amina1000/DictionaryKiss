@@ -39,9 +39,13 @@ class DescriptionActivity : AppCompatActivity() {
     }
 
     private fun setData() {
+
         val bundle = intent.extras
         description_header.text = bundle?.getString(WORD_EXTRA)
         description_textview.text = bundle?.getString(DESCRIPTION_EXTRA)
+        transcription.text = bundle?.getString(TRANSCRIPTION)
+        soundUrl.text = bundle?.getString(SOUND_URL)
+
         val imageLink = bundle?.getString(URL_EXTRA)
         if (imageLink.isNullOrBlank()) {
             stopRefreshAnimationIfNeeded(
@@ -76,16 +80,24 @@ class DescriptionActivity : AppCompatActivity() {
         private const val WORD_EXTRA = "f76a288a-5dcc-43f1-ba89-7fe1d53f63b0"
         private const val DESCRIPTION_EXTRA = "0eeb92aa-520b-4fd1-bb4b-027fbf963d9a"
         private const val URL_EXTRA = "6e4b154d-e01f-4953-a404-639fb3bf7281"
+        private const val TRANSCRIPTION = "5e4b154d-e01f-4953-a404-639fb3bf7281"
+        private const val SOUND_URL = "8e4b154d-e01f-4953-a404-639fb3bf7281"
+
 
         fun getIntent(
             context: Context,
             word: String,
             description: String,
-            url: String?
+            url: String?,
+            transcription: String?,
+            soundUrl: String?
+
         ): Intent = Intent(context, DescriptionActivity::class.java).apply {
             putExtra(WORD_EXTRA, word)
             putExtra(DESCRIPTION_EXTRA, description)
             putExtra(URL_EXTRA, url)
+            putExtra(TRANSCRIPTION, transcription)
+            putExtra(SOUND_URL,soundUrl)
         }
     }
 }

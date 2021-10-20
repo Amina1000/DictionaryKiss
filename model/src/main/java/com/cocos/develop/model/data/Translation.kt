@@ -8,4 +8,7 @@ import com.google.gson.annotations.SerializedName
  * @author Amina
  * 26.08.2021
  */
-class Translation (@field:SerializedName("text") val translation: String?)
+class Translation (
+    @field:SerializedName("text") val translation: String?,
+    @field:SerializedName("note") val note: String?
+    )

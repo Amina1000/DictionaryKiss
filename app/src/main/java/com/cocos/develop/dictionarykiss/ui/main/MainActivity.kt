@@ -5,23 +5,32 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.core.base.BaseActivity
+import com.cocos.develop.dictionarykiss.di.injectDependencies
 import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
-import com.cocos.develop.favoritescreen.ui.FavoriteActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
 import com.cocos.develop.utils.network.isOnline
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
+
+private const val HISTORY_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
+private const val HISTORY_ACTIVITY_FEATURE_NAME = "favoriteScreen"
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
+    private lateinit var splitInstallManager: SplitInstallManager
+
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
     private val fabClickListener: View.OnClickListener =
         View.OnClickListener {
@@ -37,7 +46,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings!![0].imageUrl
+                        data.meanings!![0].imageUrl,
+                        data.meanings!![0].transcription,
+                        data.meanings!![0].soundUrl
                     )
                 )
             }
@@ -62,9 +73,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     }
 
     private fun iniViewModel() {
-        if (main_activity_recyclerview.adapter != null) {
-            throw IllegalStateException(getString(R.string.error_initialised))
-        }
+        check(main_activity_recyclerview.adapter == null) {getString(R.string.error_initialised)}
+        injectDependencies()
         val viewModel: MainViewModel by viewModel()
         model = viewModel
         model.getData("", false)
@@ -91,7 +101,26 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_favorite -> {
-                startActivity(Intent(this, FavoriteActivity::class.java))
+                splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
+                val request =
+                    SplitInstallRequest
+                        .newBuilder()
+                        .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
+                        .build()
+
+                splitInstallManager
+                    .startInstall(request)
+                    .addOnSuccessListener {
+                        val intent = Intent().setClassName(packageName, HISTORY_ACTIVITY_PATH)
+                        startActivity(intent)
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            applicationContext,
+                            "Couldn't download feature: " + it.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -1,8 +1,6 @@
 package com.cocos.develop.dictionarykiss.di
 
 import androidx.room.Room
-import com.cocos.develop.favoritescreen.ui.FavoriteInteractor
-import com.cocos.develop.favoritescreen.ui.FavoriteViewModel
 import com.cocos.develop.dictionarykiss.ui.main.MainInteractor
 import com.cocos.develop.dictionarykiss.ui.main.MainViewModel
 import com.cocos.develop.repository.datasource.RetrofitImplementation
@@ -10,6 +8,7 @@ import com.cocos.develop.repository.datasource.RoomDataBaseImplementation
 import com.cocos.develop.repository.RepositoryImplementation
 import com.cocos.develop.repository.RepositoryImplementationLocal
 import com.cocos.develop.repository.room.HistoryDataBase
+import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
 /**
@@ -18,6 +17,12 @@ import org.koin.dsl.module
  * @author Amina
  * 07.09.2021
  */
+fun injectDependencies() = loadModules
+
+private val loadModules by lazy {
+    loadKoinModules(listOf(application, mainScreen))
+}
+
 val application = module {
 
     single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
@@ -39,9 +44,5 @@ val application = module {
 val mainScreen = module {
     factory { MainInteractor(get(), get()) }
     factory { MainViewModel(get()) }
-}
-val favoriteScreen = module {
-    factory { FavoriteViewModel(get()) }
-    factory { FavoriteInteractor(get()) }
 }
 

@@ -14,19 +14,30 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
             } else {
-                HistoryEntity(searchResult[0].id!!, searchResult[0].text!!, "", "")
+                val historyEntity =
+                    HistoryEntity(searchResult[0].id!!, searchResult[0].text!!, "", ""
+                ,"","","","")
                 if (searchResult[0].meanings.isNullOrEmpty()) {
-                    HistoryEntity(searchResult[0].id!!, searchResult[0].text!!, "", "")
+                    historyEntity
                 } else {
                     searchResult[0].meanings?.get(0)?.let {
-                        val descriptions = it.translation!!.translation
-                        val imageUrl = it.imageUrl.toString()
-                        HistoryEntity(
-                            searchResult[0].id!!,
-                            searchResult[0].text!!,
-                            descriptions,
-                            imageUrl
-                        )
+                        it.imageUrl?.let { image->
+                            historyEntity.imageUrl = image
+                        }
+                        it.previewUrl?.let { prev->
+                            historyEntity.previewUrl =prev
+                        }
+                        it.transcription?.let { script->
+                            historyEntity.transcription = script
+                        }
+                        it.translation?.let { transEntity->
+                            historyEntity.translation = transEntity.translation
+                            historyEntity.note = transEntity.note
+                        }
+                        it.soundUrl?.let{sound ->
+                            historyEntity.soundUrl = sound
+                        }
+                    historyEntity
                     }
                 }
             }
@@ -42,7 +53,8 @@ fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
             searchResult.add(
                 DataModel(
                     entity.id, entity.word,
-                    listOf(Meanings(entity.id, Translation(entity.description), entity.imageUrl))
+                    listOf(Meanings(entity.id, Translation(entity.translation, entity.note),
+                        entity.imageUrl,entity.previewUrl, entity.transcription, entity.soundUrl))
                 )
             )
         }

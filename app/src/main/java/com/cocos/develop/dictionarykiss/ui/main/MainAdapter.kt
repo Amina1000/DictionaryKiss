@@ -45,7 +45,7 @@ class MainAdapter(private var onListItemClickListener: OnListItemClickListener) 
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 itemView.header_textview_recycler_item.text = data.text
                 itemView.description_textview_recycler_item.text = data.meanings?.get(0)?.translation?.translation
-                itemView.image_url.loadImageFromResource(data.meanings?.get(0)?.imageUrl)
+                itemView.image_url.loadImageFromResource(data.meanings?.get(0)?.previewUrl)
                 itemView.setOnClickListener { openInNewWindow(data) }
             }
         }
