@@ -16,14 +16,15 @@ import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
  * @author Amina
  * 26.08.2021
  */
-class MainAdapter(private var onListItemClickListener: OnListItemClickListener, private var data: List<DataModel>) :
+class MainAdapter(private var onListItemClickListener: OnListItemClickListener) :
     RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
+
+    private var data: List<DataModel> = arrayListOf()
 
     fun setData(data: List<DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {
         return RecyclerItemViewHolder(
             LayoutInflater.from(parent.context)
