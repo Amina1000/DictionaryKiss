@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cocos.develop.dictionarykiss.R
 import com.cocos.develop.core.base.BaseActivity
 import com.cocos.develop.dictionarykiss.di.injectDependencies
@@ -16,11 +17,13 @@ import com.cocos.develop.dictionarykiss.ui.description.DescriptionActivity
 import com.cocos.develop.dictionarykiss.ui.main.*
 import com.cocos.develop.dictionarykiss.utils.convertMeaningsToString
 import com.cocos.develop.model.data.AppState
-import com.cocos.develop.utils.network.isOnline
+import com.cocos.develop.utils.ui.viewById
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val HISTORY_ACTIVITY_PATH = "com.cocos.develop.favoritescreen.ui.FavoriteActivity"
@@ -30,6 +33,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
     private lateinit var splitInstallManager: SplitInstallManager
+
+    //Объявляем переменные на уровне класса
+    private val mainRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
+    private val searchFAB by viewById<FloatingActionButton>(R.id.search_fab)
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
     private val fabClickListener: View.OnClickListener =
@@ -56,7 +63,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) {
-                isNetworkAvailable = isOnline(applicationContext)
                 if (isNetworkAvailable) {
                     model.getData(searchWord, isNetworkAvailable)
                 } else {
@@ -75,22 +81,22 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private fun iniViewModel() {
         check(main_activity_recyclerview.adapter == null) {getString(R.string.error_initialised)}
         injectDependencies()
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
         model.getData("", false)
         model.subscribe().observe(this@MainActivity, { renderData(it) })
     }
 
     private fun initViews() {
-        search_fab.setOnClickListener(fabClickListener)
-        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-        main_activity_recyclerview.adapter = adapter
+        searchFAB.setOnClickListener(fabClickListener)
+        mainRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
+        mainRecyclerview.adapter = adapter
 
         val itemDecoration =DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
         itemDecoration.setDrawable(
             ResourcesCompat.getDrawable(resources, R.drawable.separator_vertical, null)!!
         )
-        main_activity_recyclerview.addItemDecoration(itemDecoration)
+        mainRecyclerview.addItemDecoration(itemDecoration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

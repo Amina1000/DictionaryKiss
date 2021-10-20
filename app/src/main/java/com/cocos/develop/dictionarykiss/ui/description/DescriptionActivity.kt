@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.cocos.develop.dictionarykiss.R
-import com.cocos.develop.utils.network.isOnline
 import com.cocos.develop.dictionarykiss.utils.stopRefreshAnimationIfNeeded
 import com.cocos.develop.dictionarykiss.utils.usePicassoToLoadPhoto
+import com.cocos.develop.utils.network.OnlineLiveData
 import com.cocos.develop.utils.ui.AlertDialogFragment
 import kotlinx.android.synthetic.main.activity_description.*
 
@@ -19,7 +19,7 @@ class DescriptionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_description)
 
         setActionbarHomeButtonAsUp()
-        description_screen_swipe_refresh_layout.setOnRefreshListener{ startLoadingOrShowError() }
+        description_screen_swipe_refresh_layout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
     }
 
@@ -52,26 +52,31 @@ class DescriptionActivity : AppCompatActivity() {
                 description_screen_swipe_refresh_layout
             )
         } else {
-            description_imageview.usePicassoToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
+            description_imageview.usePicassoToLoadPhoto(
+                imageLink,
+                description_screen_swipe_refresh_layout
+            )
             //description_imageview.useGlideToLoadPhoto(imageLink,description_screen_swipe_refresh_layout)
         }
     }
 
     private fun startLoadingOrShowError() {
-        if (isOnline(applicationContext)) {
-            setData()
-        } else {
-            AlertDialogFragment.newInstance(
-                getString(R.string.dialog_title_device_is_offline),
-                getString(R.string.dialog_message_device_is_offline)
-            ).show(
-                supportFragmentManager,
-                DIALOG_FRAGMENT_TAG
-            )
-            stopRefreshAnimationIfNeeded(
-                description_screen_swipe_refresh_layout
-            )
-        }
+        OnlineLiveData(this).observe(
+            this@DescriptionActivity,
+            {
+                if (it) {
+                    setData()
+                } else {
+                    AlertDialogFragment.newInstance(
+                        getString(R.string.dialog_title_device_is_offline),
+                        getString(R.string.dialog_message_device_is_offline)
+                    ).show(
+                        supportFragmentManager,
+                        DIALOG_FRAGMENT_TAG
+                    )
+                    stopRefreshAnimationIfNeeded(description_screen_swipe_refresh_layout)
+                }
+            })
     }
 
     companion object {
@@ -97,7 +102,7 @@ class DescriptionActivity : AppCompatActivity() {
             putExtra(DESCRIPTION_EXTRA, description)
             putExtra(URL_EXTRA, url)
             putExtra(TRANSCRIPTION, transcription)
-            putExtra(SOUND_URL,soundUrl)
+            putExtra(SOUND_URL, soundUrl)
         }
     }
 }
