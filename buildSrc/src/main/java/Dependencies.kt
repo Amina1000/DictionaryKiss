@@ -8,9 +8,9 @@ import org.gradle.api.JavaVersion
 
 object Config {
     const val application_id = "com.cocos.develop.dictionarykiss"
-    const val compile_sdk = 30
+    const val compile_sdk = 31
     const val min_sdk = 23
-    const val target_sdk = 30
+    const val target_sdk = 31
     val java_version = JavaVersion.VERSION_1_8
 }
 
